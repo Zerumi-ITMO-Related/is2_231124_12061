@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, delay, retry, throwError } from 'rxjs';
-import { webSocket } from 'rxjs/webSocket';
 import { Client, Message } from '@stomp/stompjs';
 
 @Injectable({
@@ -9,7 +6,7 @@ import { Client, Message } from '@stomp/stompjs';
 })
 export class WebSocketService {
   constructor() {
-    this.connectWs();
+    // this.connectWs();
   }
 
   connectWs() {

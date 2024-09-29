@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class HttpModelService {
   constructor() {
-    this.newModel(null);
+    // this.newModel(null);
   }
 
   newModel(model: any) {
