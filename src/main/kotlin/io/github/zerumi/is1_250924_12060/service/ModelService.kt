@@ -13,9 +13,10 @@ import org.springframework.stereotype.Service
 class ModelService(
     val modelRepository: ModelRepository
 ) {
-    fun create(model: HumanBeing) {
+    fun create(model: HumanBeing): HumanBeing {
         val entity = convertToEntity(model)
-        modelRepository.save(entity)
+        val saved = modelRepository.save(entity)
+        return convertToModel(saved)
     }
 
     fun getById(id: Long) : HumanBeing {
@@ -23,11 +24,12 @@ class ModelService(
         return convertToModel(entity)
     }
 
-    fun updateById(id: Long, model: HumanBeing) {
+    fun updateById(id: Long, model: HumanBeing): HumanBeing {
         val newEntity = convertToEntity(model)
-        modelRepository.deleteById(id)
         newEntity.id = id
-        modelRepository.save(newEntity)
+        modelRepository.deleteById(id)
+        val saved = modelRepository.save(newEntity)
+        return convertToModel(saved)
     }
 
     fun deleteById(id: Long) {

@@ -8,6 +8,7 @@ import io.github.zerumi.is1_250924_12060.model.Coordinates
 import io.github.zerumi.is1_250924_12060.model.HumanBeing
 import io.github.zerumi.is1_250924_12060.service.ModelService
 import org.springframework.http.HttpStatus
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/model")
 class ModelController(
-    val modelService: ModelService
+    val modelService: ModelService,
+    val simpMessagingTemplate: SimpMessagingTemplate,
 ) {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -32,21 +34,27 @@ class ModelController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createModel(@RequestBody dto: HumanBeingDTO) {
-        val entity = convertToEntity(dto)
-        modelService.create(entity)
+        val entity = convertToModel(dto)
+        val saved = modelService.create(entity)
+        simpMessagingTemplate.convertAndSend("/newModel", saved)
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun updateModel(@PathVariable id: Long, @RequestBody dto: HumanBeingDTO) {
-        val entity = convertToEntity(dto)
-        modelService.updateById(id, entity)
+        val entity = convertToModel(dto)
+        val updated = modelService.updateById(id, entity)
+        simpMessagingTemplate.convertAndSend("/updatedModel", object {
+            val id = id
+            val modelDto = dto
+        })
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteModel(@PathVariable id: Long) {
         modelService.deleteById(id)
+        simpMessagingTemplate.convertAndSend("/removeModel", id)
     }
 
     fun convertToDto(model: HumanBeing): HumanBeingDTO = HumanBeingDTO(
@@ -66,7 +74,7 @@ class ModelController(
         weaponType = model.weaponType
     )
 
-    fun convertToEntity(dto: HumanBeingDTO): HumanBeing = HumanBeing(
+    fun convertToModel(dto: HumanBeingDTO): HumanBeing = HumanBeing(
         name = dto.name,
         coordinates = Coordinates(
             x = dto.coordinates.x,
