@@ -10,16 +10,16 @@ import java.time.ZonedDateTime
 @Table(name = "human_being")
 class HumanBeingEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = -1,
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    var id: Long? = null,
     var name: String,
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "coordinates_id", unique = true, nullable = false)
     var coordinates: CoordinatesEntity,
     var creationDate: ZonedDateTime,
     var realHero: Boolean,
     var hasToothpick: Boolean?,
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "car_id", unique = true, nullable = false)
     var car: CarEntity,
     @Enumerated(EnumType.STRING)
@@ -34,8 +34,8 @@ class HumanBeingEntity(
 @Table(name = "human_being_coordinates")
 class CoordinatesEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = -1,
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    var id: Long? = null,
     var x: Long,
     var y: Long
 ) : Serializable
@@ -44,7 +44,7 @@ class CoordinatesEntity(
 @Table(name = "human_being_car")
 class CarEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = -1,
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    var id: Long? = null,
     var name: String?
 ) : Serializable

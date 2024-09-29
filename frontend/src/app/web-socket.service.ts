@@ -26,6 +26,9 @@ export class WebSocketService {
     client.onConnect = function (frame: any) {
       // Do something, all subscribes must be done is this callback
       // This is needed because this will be executed after a (re)connect
+      client.subscribe('/topic/newModel', function (message: Message) {
+        console.log('Message: ' + message.body);
+      });
     };
     
     client.onStompError = function (frame: { headers: { [x: string]: string; }; body: string; }) {

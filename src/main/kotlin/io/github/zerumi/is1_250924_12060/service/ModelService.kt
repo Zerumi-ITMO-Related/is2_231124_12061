@@ -55,7 +55,7 @@ class ModelService(
     )
         
     fun convertToModel(entity: HumanBeingEntity): HumanBeing = HumanBeing(
-        id = entity.id,
+        id = entity.id ?: -1,
         name = entity.name,
         coordinates = Coordinates(
             x = entity.coordinates.x,

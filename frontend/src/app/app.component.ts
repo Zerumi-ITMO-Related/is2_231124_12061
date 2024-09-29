@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { WebSocketService } from './web-socket.service';
 import { catchError, retry, throwError } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpModelService } from './http-model.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AppComponent {
   title = 'frontend';
-  constructor(private webSocketService: WebSocketService) {
+  constructor(private webSocketService: WebSocketService, private httpModelService: HttpModelService) {
     console.log('Connecting to websocket');
   }
 }
