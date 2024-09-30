@@ -1,0 +1,84 @@
+<div id="container" class="margin">
+  <div id="header" class="blured-container round-container margin">
+    <p>is1-250924-12060</p>
+    <p>by Afanasyev Kirill Aleksandrovich, group no. P3306</p>
+    <p>Variant no. 12060</p>
+  </div>
+  <div id="main" class="margin centered-content">
+    <div
+      id="login-container"
+      class="margin blured-container round-container select-container centered-element no-border"
+    >
+      <div>
+        <form name="form" (ngSubmit)="login()">
+          <div class="margin left-align">
+            <h1>Login</h1>
+          </div>
+          <div class="margin select-radio-container right-align">
+            <label for="l-username">Username: </label>
+            <input id="l-username" type="text" name="username" required autocomplete="username"/>
+          </div>
+          <div class="margin select-radio-container right-align">
+            <label for="l-password">Password: </label>
+            <input id="l-password" type="password" name="password" required autocomplete="current-password"/>
+          </div>
+          <div class="margin right-align">
+            <button>Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div>
+      <div
+        id="or-container"
+        class="blured-container round-container select-container centered-element"
+      >
+        <h2>or</h2>
+      </div>
+    </div>
+    <div
+      id="register-container"
+      class="margin blured-container round-container select-container centered-element"
+    >
+      <div header="Register">
+        <div class="margin left-align">
+          <h1>Register</h1>
+        </div>
+        <form name="form" (ngSubmit)="register()">
+          <div class="margin select-radio-container right-align">
+            <label for="r-username">Username: </label>
+            <input id="r-username" type="text" name="username" required autocomplete="username"/>
+          </div>
+          <div class="margin select-radio-container right-align">
+            <label for="r-password">Password: </label>
+            <input id="r-password" type="password" name="password" required autocomplete="new-password" />
+          </div>
+          <div class="margin right-align">
+            <button>Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="footer" class="blured-container round-container margin">
+    <table class="max-width no-table-border">
+      <tr class="no-table-border">
+        <td class="no-table-border">
+          <p>
+            Copyright © Zerumi, 2024. Licensed under
+            <a href="assets/LICENSE">ISC license</a>. Plagiarism is prohibited.
+          </p>
+        </td>
+        <td class="no-table-border right-align margin">
+          <form id="time-form" class="margin">
+            <p>
+              Current time:
+              {{ time | date : "HH:mm:ss | d/M/yyyy" }}
+            </p>
+            <div class="margin select-container"></div>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
