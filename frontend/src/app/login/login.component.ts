@@ -1,35 +1,53 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { LoginData } from '../model';
+import {
+  FormControl,
+  FormsModule,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css', '../app.component.css']
+  styleUrls: ['./login.component.css', '../app.component.css'],
 })
 export class LoginComponent {
   time = new Date();
-  intervalId : any;
+  intervalId: any;
 
-  model : any = {};
+  loginForm = new FormGroup({
+    login: new FormControl(''),
+    password: new FormControl(''),
+  });
+  
+  registerForm = new FormGroup({
+    login: new FormControl(''),
+    password: new FormControl(''),
+    repeatedPassword: new FormControl(''),
+  });
+
+  loginModel: LoginData = {
+    username: '',
+    password: '',
+  };
+
   sessionID = '';
 
-  constructor(private router: Router,
-    private http: HttpClient) {
-  }
+  constructor(private router: Router, private http: HttpClient) {}
   ngOnInit() {
-    // Using Basic Interval
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
 
     if (localStorage.getItem('token')) {
-        this.router.navigate(['main'])
+      this.router.navigate(['main']);
     }
   }
 
@@ -38,41 +56,32 @@ export class LoginComponent {
   }
 
   login() {
-    const url = environment.backendURL + '/app/login';
-    this.proceedAuthRequest(url);
+    console.log('login');
+    console.log(this.loginForm.value);
+    const url = environment.backendURL + '/api/v1/login';
+    /*this.http.post(url, this.loginModel).subscribe((response: any) => {
+      if (response.status === 200) {
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['main']);
+      } else {
+        alert('Login failed');
+      }
+    });*/
   }
 
   register() {
-    const url = environment.backendURL + '/app/register';
-    this.proceedAuthRequest(url);
-  }
-
-  proceedAuthRequest(url : string) {
-    this.http.post<any>(url, {
-      username: this.model.username,
-      password: this.model.password
-    })
-      .subscribe(res => {
-          if (res) {
-            this.sessionID = res.sessionID;
-
-            localStorage.setItem(
-              'token',
-              this.sessionID
-            );
-
-            this.router.navigate(['main']).then(r => {
-              if (!r) {
-                console.error("something went wrong...");
-              }
-            });
-          } else {
-            console.error("auth failed");
-          }
-        },
-        err => {
-          alert(/<body.*?>([\s\S]*)<\/body>/.exec(err.error)![1]);
-        }
-      )
+    const url = environment.backendURL + '/api/v1/register';
+    if (this.registerForm.controls.password !== this.registerForm.controls.repeatedPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+    this.http.post(url, this.loginModel).subscribe((response: any) => {
+      if (response.status === 200) {
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['main']);
+      } else {
+        alert('Register failed');
+      }
+    });
   }
 }

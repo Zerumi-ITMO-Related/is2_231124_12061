@@ -10,17 +10,17 @@
       class="margin blured-container round-container select-container centered-element no-border"
     >
       <div>
-        <form name="form" (ngSubmit)="login()">
+        <form name="login_form" [formGroup]="loginForm" (ngSubmit)="login()">
           <div class="margin left-align">
             <h1>Login</h1>
           </div>
           <div class="margin select-radio-container right-align">
             <label for="l-username">Username: </label>
-            <input id="l-username" type="text" name="username" required autocomplete="username"/>
+            <input id="l-username" type="text" name="username" formControlName="login" [value]="loginModel.username" required autocomplete="username"/>
           </div>
           <div class="margin select-radio-container right-align">
             <label for="l-password">Password: </label>
-            <input id="l-password" type="password" name="password" required autocomplete="current-password"/>
+            <input id="l-password" type="password" name="password" formControlName="password" required autocomplete="current-password"/>
           </div>
           <div class="margin right-align">
             <button>Login</button>
@@ -44,14 +44,18 @@
         <div class="margin left-align">
           <h1>Register</h1>
         </div>
-        <form name="form" (ngSubmit)="register()">
+        <form name="register_form" [formGroup]="registerForm" (ngSubmit)="register()">
           <div class="margin select-radio-container right-align">
             <label for="r-username">Username: </label>
-            <input id="r-username" type="text" name="username" required autocomplete="username"/>
+            <input id="r-username" type="text" name="username" formControlName="login" required autocomplete="username"/>
           </div>
           <div class="margin select-radio-container right-align">
             <label for="r-password">Password: </label>
-            <input id="r-password" type="password" name="password" required autocomplete="new-password" />
+            <input id="r-password" type="password" name="password" formControlName="password" required autocomplete="new-password" />
+          </div>
+          <div class="margin select-radio-container right-align">
+            <label for="r-repeat-password">Repeat password: </label>
+            <input id="r-repeat-password" type="password" name="password" formControlName="repeatedPassword" required autocomplete="new-password" />
           </div>
           <div class="margin right-align">
             <button>Register</button>

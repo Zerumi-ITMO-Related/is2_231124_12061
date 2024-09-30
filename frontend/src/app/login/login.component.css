@@ -6,6 +6,7 @@ button {
   background-color: #4CAF50; /* A nice green color that works well with both light and dark backgrounds */
   color: #f0f0f0;
   cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
