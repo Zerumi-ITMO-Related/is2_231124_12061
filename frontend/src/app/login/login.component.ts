@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
-import { LoginData } from '../model';
+import { AuthResponse, LoginData } from '../model';
 import {
   FormControl,
   FormsModule,
@@ -59,14 +59,14 @@ export class LoginComponent {
     console.log('login');
     console.log(this.loginForm.value);
     const url = environment.backendURL + '/api/v1/login';
-    /*this.http.post(url, this.loginModel).subscribe((response: any) => {
-      if (response.status === 200) {
+    this.http.post<AuthResponse>(url, this.loginForm.value).subscribe((response: AuthResponse) => {
+      if (response.token) {
         localStorage.setItem('token', response.token);
         this.router.navigate(['main']);
       } else {
         alert('Login failed');
       }
-    });*/
+    });
   }
 
   register() {
@@ -75,8 +75,8 @@ export class LoginComponent {
       alert('Passwords do not match');
       return;
     }
-    this.http.post(url, this.loginModel).subscribe((response: any) => {
-      if (response.status === 200) {
+    this.http.post<AuthResponse>(url, this.loginModel).subscribe((response: AuthResponse) => {
+      if (response.token) {
         localStorage.setItem('token', response.token);
         this.router.navigate(['main']);
       } else {
