@@ -12,6 +12,9 @@ export class WebSocketService {
   connectWs() {
     const client = new Client({
       brokerURL: 'ws://localhost:8080/socket',
+      connectHeaders: {
+        'authorization': localStorage.getItem('token') || '',
+      },
       debug: function (str: any) {
         console.log(str);
       },
