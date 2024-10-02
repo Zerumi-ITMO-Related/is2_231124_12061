@@ -156,6 +156,36 @@ td {
   -webkit-backdrop-filter: blur(10px);
 }
 
+.max-width {
+  width: 100%;
+}
+
+.no-table-border {
+  border: none;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.left-align {
+  text-align: left;
+}
+
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.centered-element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+}
+
 #container {
   height: 100%;
   display: flex;
