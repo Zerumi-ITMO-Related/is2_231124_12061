@@ -9,7 +9,6 @@ import io.github.zerumi.is1_250924_12060.model.HumanBeing
 import io.github.zerumi.is1_250924_12060.service.ModelService
 import org.springframework.http.HttpStatus
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/model")
-@CrossOrigin(origins = ["http://localhost:4200"])
 class ModelController(
     val modelService: ModelService,
     val simpMessagingTemplate: SimpMessagingTemplate,

@@ -15,13 +15,13 @@ import java.util.*
 @Service
 class AuthService(
     private val securityConfig: SecurityConfig,
-    private val manager: AuthenticationManager,
+    private val authenticationManager: AuthenticationManager,
     private val handler: SessionHandler,
     private val repository: UserRepository,
 ) {
     fun login(userRequest: UserRequest): AuthSessionResponse {
-        manager.authenticate(
-            UsernamePasswordAuthenticationToken(
+        authenticationManager.authenticate(
+            UsernamePasswordAuthenticationToken.unauthenticated(
                 userRequest.login, userRequest.password
             )
         )

@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class SessionFilter(
     private val handler: SessionHandler,
-    private val userService: UserService
+    private val userService: UserService,
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -37,9 +37,9 @@ class SessionFilter(
         }
 
         val user: UserModel = userService.loadUserByUsername(username)
-        val auth = UsernamePasswordAuthenticationToken(
-            user,
-            null,
+        val auth = UsernamePasswordAuthenticationToken.authenticated(
+            user.username,
+            user.password,
             user.getAuthorities()
         )
         auth.details = WebAuthenticationDetailsSource().buildDetails(request)

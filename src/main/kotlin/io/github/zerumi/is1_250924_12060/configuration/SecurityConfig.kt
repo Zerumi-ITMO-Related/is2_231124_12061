@@ -10,7 +10,6 @@ import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -55,7 +54,7 @@ class SecurityConfig(
         http.authorizeHttpRequests { ar ->
             ar.requestMatchers(mvc.pattern("/api/v1/login")).permitAll()
             ar.requestMatchers(mvc.pattern("/api/v1/register")).permitAll()
-            ar.anyRequest().permitAll()
+            ar.anyRequest().authenticated()
         }.httpBasic(Customizer.withDefaults())
 
         http.addFilter(corsFilter)
