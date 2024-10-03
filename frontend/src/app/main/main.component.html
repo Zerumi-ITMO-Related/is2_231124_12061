@@ -16,21 +16,18 @@
         <td class="no-table-border">
           <button (click)="sendRequest()" class="margin">Request</button>
         </td>
+        <td class="no-table-border">
+          <button (click)="updateAll()" class="margin">updateAll</button>
+        </td>
         <td class="no-table-border right-align margin">
-          <form id="time-form" class="margin">
-            <p>
-              Current time:
-              {{ time | date : "HH:mm:ss | d/M/yyyy" }}
-            </p>
-            <div class="margin select-container"></div>
-          </form>
+          
         </td>
       </tr>
     </table>
   </div>
   <div id="main" class="margin">
     <div id="table-container" class="blured-container margin">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <table id="table" mat-table [dataSource]="(hbMaterialDataSource$ | async) ?? []" class="mat-elevation-z8">
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
 

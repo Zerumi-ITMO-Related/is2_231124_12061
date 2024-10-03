@@ -71,4 +71,6 @@ class ModelService(
         minutesOfWaiting = entity.minutesOfWaiting,
         weaponType = entity.weaponType,
     )
+
+    fun getAll(): List<HumanBeing> = modelRepository.findAll().map { convertToModel(it) }
 }

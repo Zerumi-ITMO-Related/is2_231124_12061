@@ -25,6 +25,11 @@ class ModelController(
     val modelService: ModelService,
     val simpMessagingTemplate: SimpMessagingTemplate,
 ) {
+    @GetMapping
+    fun getAllModels(): List<HumanBeingDTO> {
+        return modelService.getAll().map { convertToDto(it) }
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun getModelByID(@PathVariable id: Long): HumanBeingDTO {

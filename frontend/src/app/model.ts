@@ -7,6 +7,12 @@ export class AuthResponse {
   token!: string;
 }
 
+export interface Thing {
+  a: number,
+  b: number,
+  c: number
+}
+
 export class HumanBeing {
   id!: number;
   name!: String;

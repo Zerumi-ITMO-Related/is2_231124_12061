@@ -1,0 +1,25 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
+import { HumanBeing } from './model';
+import { environment } from '../environments/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class HumanBeingService {
+
+  constructor(private http: HttpClient) { }
+
+  private _model = new BehaviorSubject<HumanBeing[]>([])
+
+  get model() {
+    return this._model.asObservable()
+  }
+
+  updateAll() {
+    this.http.get<HumanBeing[]>(environment.backendURL + '/api/v1/model').subscribe((data) => {
+      this._model.next(data)
+    });
+  }
+}
