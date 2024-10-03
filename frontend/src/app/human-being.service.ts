@@ -8,7 +8,6 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class HumanBeingService {
-
   constructor(private http: HttpClient) { }
 
   private _model = new BehaviorSubject<HumanBeing[]>([])
@@ -21,5 +20,16 @@ export class HumanBeingService {
     this.http.get<HumanBeing[]>(environment.backendURL + '/api/v1/model').subscribe((data) => {
       this._model.next(data)
     });
+  }
+
+  update(humanBeing: HumanBeing) {
+    let model = this._model.value
+    let index = model.findIndex((hb) => hb.id === humanBeing.id)
+    if (index === -1) {
+      model.push(humanBeing)
+    } else {
+      model[index] = humanBeing
+    }
+    this._model.next(model)
   }
 }

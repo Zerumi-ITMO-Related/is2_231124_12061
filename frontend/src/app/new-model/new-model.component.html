@@ -1,1 +1,54 @@
-<p>new-model works!</p>
+<!-- new-model.component.html -->
+<form [formGroup]="newModelForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="name" required />
+  </div>
+  <div>
+    <label for="x">Coordinate X:</label>
+    <input type="number" id="x" formControlName="x" required />
+  </div>
+  <div>
+    <label for="y">Coordinate Y:</label>
+    <input type="number" id="y" formControlName="y" required />
+  </div>
+  <div>
+    <label for="realHero">Real Hero:</label>
+    <input type="checkbox" id="realHero" formControlName="realHero" />
+  </div>
+  <div>
+    <label for="hasToothpick">Has Toothpick:</label>
+    <input type="checkbox" id="hasToothpick" formControlName="hasToothpick" />
+  </div>
+  <div>
+    <label for="carName">Car Name:</label>
+    <input type="text" id="carName" formControlName="carName" required />
+  </div>
+  <div>
+    <label for="mood">Mood:</label>
+    <input type="text" id="mood" formControlName="mood" required />
+  </div>
+  <div>
+    <label for="impactSpeed">Impact Speed:</label>
+    <input
+      type="number"
+      id="impactSpeed"
+      formControlName="impactSpeed"
+      required
+    />
+  </div>
+  <div>
+    <label for="minutesOfWaiting">Minutes of Waiting:</label>
+    <input
+      type="number"
+      id="minutesOfWaiting"
+      formControlName="minutesOfWaiting"
+      required
+    />
+  </div>
+  <div>
+    <label for="weaponType">Weapon Type:</label>
+    <input type="text" id="weaponType" formControlName="weaponType" required />
+  </div>
+  <button type="submit">Submit</button>
+</form>

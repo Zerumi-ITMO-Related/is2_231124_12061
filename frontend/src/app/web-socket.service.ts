@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
+import { HumanBeingService } from './human-being.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  constructor() {
-    // this.connectWs();
+  private hbService: HumanBeingService
+  constructor(hbService: HumanBeingService) {
+    this.hbService = hbService;
   }
 
   connectWs() {
@@ -22,12 +24,14 @@ export class WebSocketService {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
+
+    const hbService = this.hbService;
     
     client.onConnect = function (frame: any) {
       // Do something, all subscribes must be done is this callback
       // This is needed because this will be executed after a (re)connect
       client.subscribe('/topic/newModel', function (message: Message) {
-        console.log('Message: ' + message.body);
+        hbService.update(JSON.parse(message.body));
       });
     };
     
