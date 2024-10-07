@@ -71,5 +71,3 @@ class SessionHandler {
         private val sessions = HashMap<String, String>()
     }
 }
-
-
