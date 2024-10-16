@@ -119,7 +119,7 @@ export class MainComponent implements AfterViewInit {
     'creationDate',
   ];
 
-  @ViewChild(MatMenuTrigger)
+  @ViewChild('contextMenuTrigger')
   contextMenu!: MatMenuTrigger;
 
   contextMenuPosition = { x: '0px', y: '0px' };
