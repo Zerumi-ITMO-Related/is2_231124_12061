@@ -8,10 +8,12 @@ import { Car, Coordinates, HumanBeing, Thing } from '../model';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Observable, map } from 'rxjs';
 import { HumanBeingService } from '../human-being.service';
 import { ThingService } from '../thing.service';
+import { MatFormField, MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 const ELEMENT_DATA: HumanBeing[] = [
   {
@@ -32,7 +34,7 @@ const ELEMENT_DATA: HumanBeing[] = [
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
@@ -69,8 +71,12 @@ export class MainComponent implements AfterViewInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   thingsAsMatTableDataSource$: Observable<MatTableDataSource<Thing>>;
@@ -99,6 +105,11 @@ export class MainComponent implements AfterViewInit {
     'creationDate',
   ];
 
+  applyFilter($event: Event) {
+    const filterValue = ($event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   newModel() {
     this.router.navigate(['/newModel']);
   }
@@ -107,33 +118,10 @@ export class MainComponent implements AfterViewInit {
     this.humanBeingService.updateAll();
   }
 
-  sendRequest() {
-    this.http.get('http://localhost:8080/api/v1/model/1').subscribe((data) => {
-      console.log(data);
-    });
-  }
-
   logout() {
     localStorage.removeItem('token');
     this.http.delete(environment.backendURL + '/api/v1/logout');
     this.router.navigate(['']);
     this.webSocketService.disconnectWs();
-  }
-
-  newComponent() {
-    ELEMENT_DATA.push({
-      id: 1,
-      name: 'Hydrogen',
-      coordinates: new Coordinates(),
-      realHero: true,
-      hasToothpick: true,
-      car: new Car(),
-      mood: '123',
-      impactSpeed: 0,
-      minutesOfWaiting: 0,
-      weaponType: '2233',
-      creationDate: '3322',
-    });
-    console.log(ELEMENT_DATA);
   }
 }
