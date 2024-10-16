@@ -11,9 +11,7 @@
         <td class="no-table-border">
           <button (click)="newModel()" class="margin">New model</button>
         </td>
-        <td class="no-table-border">
-
-        </td>
+        <td class="no-table-border"></td>
         <td class="no-table-border">
           <button (click)="updateAll()" class="margin">updateAll</button>
         </td>
@@ -22,10 +20,13 @@
     </table>
   </div>
   <div id="main" class="margin">
-    <div id="table-container" class="round-container blured-container margin max-width">
+    <div
+      id="table-container"
+      class="round-container blured-container margin max-width"
+    >
       <div class="margin">
         <mat-form-field>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filter" />
         </mat-form-field>
       </div>
       <table
@@ -53,7 +54,9 @@
         <!-- Coordinates Column -->
         <ng-container matColumnDef="coordinates">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Coordinates</th>
-          <td mat-cell *matCellDef="let element">{{ 'x:' + element.coordinates.x + ' y:' + element.coordinates.y }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ "x:" + element.coordinates.x + " y:" + element.coordinates.y }}
+          </td>
         </ng-container>
 
         <!-- Created at Column -->
@@ -70,7 +73,9 @@
 
         <!-- Has Toothpick Column -->
         <ng-container matColumnDef="hasToothpick">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Has Toothpick</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Has Toothpick
+          </th>
           <td mat-cell *matCellDef="let element">{{ element.hasToothpick }}</td>
         </ng-container>
 
@@ -88,13 +93,17 @@
 
         <!--Impact Speed Column-->
         <ng-container matColumnDef="impactSpeed">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Impact Speed</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Impact Speed
+          </th>
           <td mat-cell *matCellDef="let element">{{ element.impactSpeed }}</td>
         </ng-container>
 
         <!--Minutes of Waiting Column-->
         <ng-container matColumnDef="minutesOfWaiting">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Minutes of Waiting</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Minutes of Waiting
+          </th>
           <td mat-cell *matCellDef="let element">
             {{ element.minutesOfWaiting }}
           </td>
@@ -107,7 +116,11 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (contextmenu)="onContextMenu($event, row)"
+        ></tr>
       </table>
       <mat-paginator
         #paginator
@@ -139,3 +152,15 @@
     </table>
   </div>
 </div>
+<div
+  style="visibility: hidden; position: fixed"
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="contextMenu"
+></div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="onTableContextEdit(item)">Edit</button>
+    <button mat-menu-item (click)="onTableContextDelete(item)">Delete</button>
+  </ng-template>
+</mat-menu>

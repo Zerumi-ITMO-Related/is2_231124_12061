@@ -43,7 +43,6 @@ export class WebSocketService {
     this.client.activate();
   }
 
-
   disconnectWs() {
     this.client.deactivate();
   }

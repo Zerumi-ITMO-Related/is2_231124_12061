@@ -7,13 +7,22 @@ import { HttpModelService } from '../http-model.service';
 import { Car, Coordinates, HumanBeing, Thing } from '../model';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Observable, map } from 'rxjs';
 import { HumanBeingService } from '../human-being.service';
 import { ThingService } from '../thing.service';
-import { MatFormField, MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatFormFieldControl,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenu, MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 
 const ELEMENT_DATA: HumanBeing[] = [
   {
@@ -34,7 +43,15 @@ const ELEMENT_DATA: HumanBeing[] = [
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatMenuModule,
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
@@ -105,6 +122,19 @@ export class MainComponent implements AfterViewInit {
     'creationDate',
   ];
 
+  @ViewChild(MatMenuTrigger)
+  contextMenu!: MatMenuTrigger;
+
+  contextMenuPosition = { x: '0px', y: '0px' };
+
+  onContextMenu(event: MouseEvent, item: any) {
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenu.menuData = { 'item': item };
+    this.contextMenu.openMenu();
+  }
+
   applyFilter($event: Event) {
     const filterValue = ($event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -116,6 +146,14 @@ export class MainComponent implements AfterViewInit {
 
   updateAll() {
     this.humanBeingService.updateAll();
+  }
+
+  onTableContextDelete(item: any) {
+    console.log(item);
+  }
+
+  onTableContextEdit(item: any) {
+    console.log(item);
   }
 
   logout() {
