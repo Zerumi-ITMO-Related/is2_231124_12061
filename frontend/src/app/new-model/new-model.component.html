@@ -1,5 +1,5 @@
 <!-- new-model.component.html -->
-<h2 mat-dialog-title>New Model</h2>
+<h2 mat-dialog-title>{{ invitation }}</h2>
 <mat-dialog-content>
   <form [formGroup]="newModelForm" (ngSubmit)="onSubmit()" class="form-grid">
     <div class="form-column">

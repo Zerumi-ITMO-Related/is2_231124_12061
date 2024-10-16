@@ -50,6 +50,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 })
 export class NewModelComponent implements OnInit {
   newModelForm!: FormGroup;
+  invitation: string;
 
   constructor(
     private fb: FormBuilder,
@@ -57,7 +58,13 @@ export class NewModelComponent implements OnInit {
     private dialogRef: DialogRef<NewModelComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { update: boolean; sourceItem: HumanBeing }
-  ) {}
+  ) {
+    if (this.data.update) {
+      this.invitation = 'Edit model';
+    } else {
+      this.invitation = 'Add new model';
+    }
+  }
 
   ngOnInit(): void {
     if (this.data.update) {
