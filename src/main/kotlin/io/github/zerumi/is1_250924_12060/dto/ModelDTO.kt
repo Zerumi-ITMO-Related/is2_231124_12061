@@ -3,6 +3,7 @@ package io.github.zerumi.is1_250924_12060.dto
 import io.github.zerumi.is1_250924_12060.model.Mood
 import io.github.zerumi.is1_250924_12060.model.WeaponType
 import java.io.Serializable
+import java.time.ZonedDateTime
 
 data class HumanBeingDTO(
     val name: String,
@@ -15,6 +16,20 @@ data class HumanBeingDTO(
     val minutesOfWaiting: Int,
     val weaponType: WeaponType,
 ): Serializable
+
+data class HumanBeingFullDTO(
+    val id: Long,
+    val name: String,
+    val coordinates: CoordinatesDTO,
+    val creationDate: ZonedDateTime,
+    val realHero: Boolean,
+    val hasToothpick: Boolean?,
+    val car: CarDTO,
+    val mood: Mood,
+    val impactSpeed: Long,
+    val minutesOfWaiting: Int,
+    val weaponType: WeaponType,
+)
 
 data class CoordinatesDTO(
     val x: Long,

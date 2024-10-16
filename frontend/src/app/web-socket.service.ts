@@ -7,25 +7,23 @@ import { HumanBeingService } from './human-being.service';
 })
 export class WebSocketService {
   private hbService: HumanBeingService
+  private client: Client = new Client({
+    brokerURL: 'ws://localhost:8080/socket',
+    connectHeaders: {
+      'authorization': localStorage.getItem('token') || '',
+    },
+    debug: function (str: any) {
+      console.log(str);
+    },
+    reconnectDelay: 5000,
+    heartbeatIncoming: 4000,
+    heartbeatOutgoing: 4000,
+  });
+
   constructor(hbService: HumanBeingService) {
     this.hbService = hbService;
-  }
 
-  connectWs() {
-    const client = new Client({
-      brokerURL: 'ws://localhost:8080/socket',
-      connectHeaders: {
-        'authorization': localStorage.getItem('token') || '',
-      },
-      debug: function (str: any) {
-        console.log(str);
-      },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    });
-
-    const hbService = this.hbService;
+    const client = this.client;
     
     client.onConnect = function (frame: any) {
       // Do something, all subscribes must be done is this callback
@@ -39,7 +37,14 @@ export class WebSocketService {
       console.log('Broker reported error: ' + frame.headers['message']);
       console.log('Additional details: ' + frame.body);
     };
-    
-    client.activate();
+  }
+
+  connectWs() {
+    this.client.activate();
+  }
+
+
+  disconnectWs() {
+    this.client.deactivate();
   }
 }

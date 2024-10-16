@@ -19,6 +19,7 @@ export class HumanBeingService {
   updateAll() {
     this.http.get<HumanBeing[]>(environment.backendURL + '/api/v1/model').subscribe((data) => {
       this._model.next(data)
+      console.log(data)
     });
   }
 

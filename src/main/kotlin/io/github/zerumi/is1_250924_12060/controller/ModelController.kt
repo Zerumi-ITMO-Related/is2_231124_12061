@@ -3,6 +3,7 @@ package io.github.zerumi.is1_250924_12060.controller
 import io.github.zerumi.is1_250924_12060.dto.CarDTO
 import io.github.zerumi.is1_250924_12060.dto.CoordinatesDTO
 import io.github.zerumi.is1_250924_12060.dto.HumanBeingDTO
+import io.github.zerumi.is1_250924_12060.dto.HumanBeingFullDTO
 import io.github.zerumi.is1_250924_12060.model.Car
 import io.github.zerumi.is1_250924_12060.model.Coordinates
 import io.github.zerumi.is1_250924_12060.model.HumanBeing
@@ -26,13 +27,13 @@ class ModelController(
     val simpMessagingTemplate: SimpMessagingTemplate,
 ) {
     @GetMapping
-    fun getAllModels(): List<HumanBeingDTO> {
+    fun getAllModels(): List<HumanBeingFullDTO> {
         return modelService.getAll().map { convertToDto(it) }
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getModelByID(@PathVariable id: Long): HumanBeingDTO {
+    fun getModelByID(@PathVariable id: Long): HumanBeingFullDTO {
         return convertToDto(modelService.getById(id))
     }
 
@@ -62,12 +63,14 @@ class ModelController(
         simpMessagingTemplate.convertAndSend("/topic/removeModel", id)
     }
 
-    fun convertToDto(model: HumanBeing): HumanBeingDTO = HumanBeingDTO(
+    fun convertToDto(model: HumanBeing): HumanBeingFullDTO = HumanBeingFullDTO(
+        id = model.id,
         name = model.name,
         coordinates = CoordinatesDTO(
             x = model.coordinates.x,
             y = model.coordinates.y
         ),
+        creationDate = model.creationDate,
         realHero = model.realHero,
         hasToothpick = model.hasToothpick,
         car = CarDTO(

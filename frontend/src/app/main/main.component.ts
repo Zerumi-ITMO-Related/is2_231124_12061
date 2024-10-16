@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -7,7 +7,7 @@ import { HttpModelService } from '../http-model.service';
 import { Car, Coordinates, HumanBeing, Thing } from '../model';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { Observable, map } from 'rxjs';
 import { HumanBeingService } from '../human-being.service';
@@ -36,8 +36,7 @@ const ELEMENT_DATA: HumanBeing[] = [
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
-export class MainComponent {
-
+export class MainComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<HumanBeing>();
   thingDataSource = new MatTableDataSource<Thing>();
 
@@ -61,11 +60,17 @@ export class MainComponent {
     this.thingsAsMatTableDataSource$ = this.thingService.things.pipe(
       map((things) => {
         const dataSource = this.thingDataSource;
-        this.thingDataSource.data = things
+        this.thingDataSource.data = things;
         return dataSource;
       })
     );
+  }
 
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   thingsAsMatTableDataSource$: Observable<MatTableDataSource<Thing>>;
@@ -109,12 +114,10 @@ export class MainComponent {
   }
 
   logout() {
-    this.http
-      .delete(environment.backendURL + '/api/v1/logout')
-      .subscribe(() => {
-        localStorage.removeItem('token');
-        this.router.navigate(['']);
-      });
+    localStorage.removeItem('token');
+    this.http.delete(environment.backendURL + '/api/v1/logout');
+    this.router.navigate(['']);
+    this.webSocketService.disconnectWs();
   }
 
   newComponent() {
