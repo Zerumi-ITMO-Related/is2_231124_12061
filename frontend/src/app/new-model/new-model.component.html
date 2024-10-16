@@ -1,54 +1,81 @@
 <!-- new-model.component.html -->
-<form [formGroup]="newModelForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" id="name" formControlName="name" required />
-  </div>
-  <div>
-    <label for="x">Coordinate X:</label>
-    <input type="number" id="x" formControlName="x" required />
-  </div>
-  <div>
-    <label for="y">Coordinate Y:</label>
-    <input type="number" id="y" formControlName="y" required />
-  </div>
-  <div>
-    <label for="realHero">Real Hero:</label>
-    <input type="checkbox" id="realHero" formControlName="realHero" />
-  </div>
-  <div>
-    <label for="hasToothpick">Has Toothpick:</label>
-    <input type="checkbox" id="hasToothpick" formControlName="hasToothpick" />
-  </div>
-  <div>
-    <label for="carName">Car Name:</label>
-    <input type="text" id="carName" formControlName="carName" required />
-  </div>
-  <div>
-    <label for="mood">Mood:</label>
-    <input type="text" id="mood" formControlName="mood" required />
-  </div>
-  <div>
-    <label for="impactSpeed">Impact Speed:</label>
-    <input
-      type="number"
-      id="impactSpeed"
-      formControlName="impactSpeed"
-      required
-    />
-  </div>
-  <div>
-    <label for="minutesOfWaiting">Minutes of Waiting:</label>
-    <input
-      type="number"
-      id="minutesOfWaiting"
-      formControlName="minutesOfWaiting"
-      required
-    />
-  </div>
-  <div>
-    <label for="weaponType">Weapon Type:</label>
-    <input type="text" id="weaponType" formControlName="weaponType" required />
-  </div>
-  <button type="submit">Submit</button>
-</form>
+<h2 mat-dialog-title>New Model</h2>
+<mat-dialog-content>
+  <form [formGroup]="newModelForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" required />
+      <mat-error *ngIf="newModelForm.get('name')?.hasError('required')"
+        >Name is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Coordinate X</mat-label>
+      <input matInput type="number" formControlName="x" required />
+      <mat-error *ngIf="newModelForm.get('x')?.hasError('required')"
+        >Coordinate X is required</mat-error>
+      <mat-error *ngIf="newModelForm.get('x')?.hasError('max')"
+        >Coordinate X must be less than or equal to 605</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Coordinate Y</mat-label>
+      <input matInput type="number" formControlName="y" required />
+      <mat-error *ngIf="newModelForm.get('y')?.hasError('required')"
+        >Coordinate Y is required</mat-error>
+    </mat-form-field>
+    <mat-checkbox formControlName="realHero">Real Hero</mat-checkbox>
+    <mat-checkbox formControlName="hasToothpick">Has Toothpick</mat-checkbox>
+    <mat-form-field>
+      <mat-label>Car Name</mat-label>
+      <input matInput formControlName="carName"/>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Mood</mat-label>
+      <mat-select formControlName="mood" required>
+        <mat-option value="SADNESS">Sadness</mat-option>
+        <mat-option value="LONGING">Longing</mat-option>
+        <mat-option value="GLOOM">Gloom</mat-option>
+        <mat-option value="RAGE">Rage</mat-option>
+        <mat-option value="FRENZY">Frenzy</mat-option>
+      </mat-select>
+      <mat-error *ngIf="newModelForm.get('x')?.hasError('required')"
+        >Choose a mood</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Impact Speed</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="impactSpeed"
+        required
+      />
+      <mat-error *ngIf="newModelForm.get('x')?.hasError('required')"
+        >Impact Speed is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Minutes of Waiting</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="minutesOfWaiting"
+        required
+      />
+      <mat-error *ngIf="newModelForm.get('x')?.hasError('required')"
+        >Minutes of waiting is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Weapon Type</mat-label>
+      <mat-select formControlName="weaponType" required>
+        <mat-option value="AXE">Axe</mat-option>
+        <mat-option value="PISTOL">Pistol</mat-option>
+        <mat-option value="KNIFE">Knife</mat-option>
+        <mat-option value="BAT">Bat</mat-option>
+      </mat-select>
+      <mat-error *ngIf="newModelForm.get('x')?.hasError('required')"
+        >Choose a weapon type</mat-error>
+    </mat-form-field>
+    <br/>
+    <button mat-button color="primary" type="submit">
+      Submit
+    </button>
+  </form>
+</mat-dialog-content>

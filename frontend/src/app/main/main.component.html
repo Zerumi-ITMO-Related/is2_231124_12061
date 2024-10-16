@@ -9,13 +9,13 @@
 
         </td>
         <td class="no-table-border">
-          <button (click)="newModel()" class="margin">New model</button>
+
         </td>
         <td class="no-table-border">
           
         </td>
         <td class="no-table-border">
-          <button (click)="updateAll()" class="margin">updateAll</button>
+          
         </td>
         <td class="no-table-border right-align margin">
           <a mat-raised-button [matMenuTriggerFor]="userMenu">
@@ -36,9 +36,9 @@
     >
       <div class="margin">
         <table class="no-table-border">
-          <tr class="no-table-border">
-            <td class="no-table-border">
-              <mat-form-field>
+          <tr class="no-table-border centered-content">
+            <td class="no-table-border centered-content">
+              <mat-form-field subscriptSizing="dynamic">
                 <input
                   matInput
                   (keyup)="applyFilter($event)"
@@ -46,9 +46,18 @@
                 />
               </mat-form-field>
             </td>
-            <td class="no-table-border">
+            <td class="no-table-border centered-content">
               <button mat-raised-button (click)="updateAll()" class="margin">
                 Refresh
+              </button>
+            </td>
+            <td class="no-table-border centered-content">
+              <button
+                mat-raised-button
+                (click)="newModel()"
+                class="margin"
+              >
+                Add
               </button>
             </td>
           </tr>

@@ -35,3 +35,8 @@ export class Coordinates {
 export class Car {
   name!: String;
 }
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}

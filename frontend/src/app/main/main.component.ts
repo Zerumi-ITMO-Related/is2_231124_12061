@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -21,6 +21,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewModelComponent } from '../new-model/new-model.component';
+import { FormsModule } from '@angular/forms';
 
 const ELEMENT_DATA: HumanBeing[] = [
   {
@@ -134,8 +137,20 @@ export class MainComponent implements AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+
+  readonly dialog = inject(MatDialog);
+  
   newModel() {
-    this.router.navigate(['/newModel']);
+    const dialogRef = this.dialog.open(NewModelComponent, {
+      data: {name: "123", animal: "123"},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        // todo: send the new model to the server
+        console.log(result);
+      }
+    });
   }
 
   updateAll() {
