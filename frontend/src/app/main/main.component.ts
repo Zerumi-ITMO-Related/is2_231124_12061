@@ -4,25 +4,23 @@ import { HttpClient } from '@angular/common/http';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { WebSocketService } from '../web-socket.service';
 import { HttpModelService } from '../http-model.service';
-import { Car, Coordinates, HumanBeing, Thing } from '../model';
+import { Car, Coordinates, HumanBeing, UserProfile } from '../model';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
 import {
   MatPaginator,
   MatPaginatorModule,
-  PageEvent,
 } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Observable, map } from 'rxjs';
 import { HumanBeingService } from '../human-being.service';
-import { ThingService } from '../thing.service';
 import {
-  MatFormField,
-  MatFormFieldControl,
   MatFormFieldModule,
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenu, MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { UserService } from '../user.service';
 
 const ELEMENT_DATA: HumanBeing[] = [
   {
@@ -51,22 +49,23 @@ const ELEMENT_DATA: HumanBeing[] = [
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
+    MatButtonModule,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
 export class MainComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<HumanBeing>();
-  thingDataSource = new MatTableDataSource<Thing>();
 
   hbMaterialDataSource$: Observable<MatTableDataSource<HumanBeing>>;
+  currentUser: UserProfile = new UserProfile();
 
   constructor(
     private router: Router,
     private webSocketService: WebSocketService,
     private httpModelService: HttpModelService,
     private humanBeingService: HumanBeingService,
-    private thingService: ThingService,
+    private userService: UserService,
     private http: HttpClient
   ) {
     this.hbMaterialDataSource$ = this.humanBeingService.model.pipe(
@@ -76,13 +75,9 @@ export class MainComponent implements AfterViewInit {
         return dataSource;
       })
     );
-    this.thingsAsMatTableDataSource$ = this.thingService.things.pipe(
-      map((things) => {
-        const dataSource = this.thingDataSource;
-        this.thingDataSource.data = things;
-        return dataSource;
-      })
-    );
+    this.userService.authenticatedUser.subscribe((user) => {
+      this.currentUser = user;
+    })
   }
 
   @ViewChild(MatPaginator)
@@ -96,8 +91,6 @@ export class MainComponent implements AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  thingsAsMatTableDataSource$: Observable<MatTableDataSource<Thing>>;
-
   time = new Date();
   intervalId: any;
 
@@ -106,6 +99,7 @@ export class MainComponent implements AfterViewInit {
       this.time = new Date();
     }, 1000);
     this.webSocketService.connectWs();
+    this.userService.updateAuthenticatedUser();
   }
 
   displayedColumns: string[] = [

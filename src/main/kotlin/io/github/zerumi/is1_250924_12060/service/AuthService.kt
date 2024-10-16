@@ -45,15 +45,17 @@ class AuthService(
 
 @Component
 class SessionHandler {
+    companion object {
+        private val sessions = HashMap<String, String>()
+    }
+
     fun register(username: String): String {
         val sessionID = generateSessionID()
         sessions[sessionID] = username
         return sessionID
     }
 
-    fun getUsernameForSession(sessionID: String): String? {
-        return sessions[sessionID]
-    }
+    fun getUsernameForSession(sessionID: String): String? = sessions[sessionID]
 
     private fun generateSessionID(): String {
         return String(
@@ -63,11 +65,5 @@ class SessionHandler {
         )
     }
 
-    fun invalidate(token: String) {
-        sessions.remove(token)
-    }
-
-    companion object {
-        private val sessions = HashMap<String, String>()
-    }
+    fun invalidate(token: String) = sessions.remove(token)
 }

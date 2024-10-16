@@ -6,16 +6,26 @@
           <p>IS</p>
         </td>
         <td class="no-table-border">
-          <button (click)="logout()" class="margin">Logout</button>
+
         </td>
         <td class="no-table-border">
           <button (click)="newModel()" class="margin">New model</button>
         </td>
-        <td class="no-table-border"></td>
+        <td class="no-table-border">
+          
+        </td>
         <td class="no-table-border">
           <button (click)="updateAll()" class="margin">updateAll</button>
         </td>
-        <td class="no-table-border right-align margin"></td>
+        <td class="no-table-border right-align margin">
+          <a mat-raised-button [matMenuTriggerFor]="userMenu">
+            Welcome back,
+            {{ currentUser.username }}
+          </a>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item (click)="logout()" class="margin">Logout</button>
+          </mat-menu>
+        </td>
       </tr>
     </table>
   </div>
@@ -25,9 +35,24 @@
       class="round-container blured-container margin max-width"
     >
       <div class="margin">
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Filter" />
-        </mat-form-field>
+        <table class="no-table-border">
+          <tr class="no-table-border">
+            <td class="no-table-border">
+              <mat-form-field>
+                <input
+                  matInput
+                  (keyup)="applyFilter($event)"
+                  placeholder="Filter"
+                />
+              </mat-form-field>
+            </td>
+            <td class="no-table-border">
+              <button mat-raised-button (click)="updateAll()" class="margin">
+                Refresh
+              </button>
+            </td>
+          </tr>
+        </table>
       </div>
       <table
         id="table"
@@ -36,9 +61,6 @@
         matSort
         class="mat-elevation-z8"
       >
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-
         <!-- ID Column -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>

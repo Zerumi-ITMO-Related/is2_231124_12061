@@ -18,6 +18,7 @@ class UserService (val repository: UserRepository) : UserDetailsService {
     }
 
     fun convertEntityToModel(entity: UserEntity): UserModel = UserModel(
+        id = entity.id ?: -1,
         username = entity.username,
         password = entity.password,
         accountNonExpired = entity.isAccountNonExpired ?: true,

@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class Is125092412060Application
 
 fun main(args: Array<String>) {
-	runApplication<Is125092412060Application>(*args)
+    runApplication<Is125092412060Application>(*args)
 }

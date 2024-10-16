@@ -5,12 +5,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class UserModel(
+    val id: Long,
     private val username: String,
     private val password: String,
     private val accountNonExpired: Boolean = true,
     private val accountNonLocked: Boolean = true,
     private val credentialsNonExpired: Boolean = true,
-    private val enabled: Boolean = true
+    private val enabled: Boolean = true,
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf(
         SimpleGrantedAuthority("USER")
