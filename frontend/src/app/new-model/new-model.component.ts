@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -50,24 +51,48 @@ import { DialogRef } from '@angular/cdk/dialog';
 export class NewModelComponent implements OnInit {
   newModelForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private dialogRef: DialogRef<NewModelComponent>) {}
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private dialogRef: DialogRef<NewModelComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { update: boolean; sourceItem: HumanBeing }
+  ) {}
 
   ngOnInit(): void {
-    this.newModelForm = this.fb.group({
-      name: ['', Validators.required],
-      x: ['', [Validators.required, Validators.max(605)]],
-      y: ['', [Validators.required]],
-      realHero: [false],
-      hasToothpick: [false],
-      carName: [null],
-      mood: ['', Validators.required],
-      impactSpeed: ['', [Validators.required]],
-      minutesOfWaiting: [
-        '',
-        [Validators.required],
-      ],
-      weaponType: ['', Validators.required],
-    });
+    if (this.data.update) {
+      this.newModelForm = this.fb.group({
+        name: [this.data.sourceItem.name, Validators.required],
+        x: [
+          this.data.sourceItem.coordinates.x,
+          [Validators.required, Validators.max(605)],
+        ],
+        y: [this.data.sourceItem.coordinates.y, [Validators.required]],
+        realHero: [this.data.sourceItem.realHero],
+        hasToothpick: [this.data.sourceItem.hasToothpick],
+        carName: [this.data.sourceItem.car?.name],
+        mood: [this.data.sourceItem.mood, Validators.required],
+        impactSpeed: [this.data.sourceItem.impactSpeed, [Validators.required]],
+        minutesOfWaiting: [
+          this.data.sourceItem.minutesOfWaiting,
+          [Validators.required],
+        ],
+        weaponType: [this.data.sourceItem.weaponType, Validators.required],
+      });
+    } else {
+      this.newModelForm = this.fb.group({
+        name: ['', Validators.required],
+        x: ['', [Validators.required, Validators.max(605)]],
+        y: ['', [Validators.required]],
+        realHero: [false],
+        hasToothpick: [false],
+        carName: [null],
+        mood: ['', Validators.required],
+        impactSpeed: ['', [Validators.required]],
+        minutesOfWaiting: ['', [Validators.required]],
+        weaponType: ['', Validators.required],
+      });
+    }
   }
 
   onSubmit(): void {
@@ -94,6 +119,10 @@ export class NewModelComponent implements OnInit {
       console.log('New model form invalid');
       console.log(this.getFormValidationErrors());
     }
+  }
+
+  onCancel() {
+    this.dialogRef.close();
   }
 
   getFormValidationErrors() {

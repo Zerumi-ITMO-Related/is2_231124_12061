@@ -141,28 +141,19 @@ export class MainComponent implements AfterViewInit {
   readonly dialog = inject(MatDialog);
   
   newModel() {
-    const dialogRef = this.dialog.open(NewModelComponent, {
-      data: {name: "123", animal: "123"},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        // todo: send the new model to the server
-        console.log(result);
-      }
-    });
+    this.dialog.open(NewModelComponent, { data: { update: false } });
   }
 
   updateAll() {
     this.humanBeingService.updateAll();
   }
 
-  onTableContextDelete(item: any) {
+  onTableContextDelete(item: HumanBeing) {
     console.log(item);
   }
 
-  onTableContextEdit(item: any) {
-    console.log(item);
+  onTableContextEdit(item: HumanBeing) {
+    this.dialog.open(NewModelComponent, { data: { update: true, sourceItem: item } });
   }
 
   logout() {
