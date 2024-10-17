@@ -57,11 +57,11 @@ class ModelController(
         val updated = modelService.updateById(id, entity, userService.loadUserBySessionId(auth))
         simpMessagingTemplate.convertAndSend("/topic/updatedModel", object {
             val id = id
-            val modelDto = dto
+            val modelDto = convertToDto(updated)
         })
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteModel(@PathVariable id: Long, @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String) {
         modelService.deleteById(id, userService.loadUserBySessionId(auth))

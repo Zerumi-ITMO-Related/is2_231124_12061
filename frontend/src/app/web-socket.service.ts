@@ -31,6 +31,14 @@ export class WebSocketService {
       client.subscribe('/topic/newModel', function (message: Message) {
         hbService.update(JSON.parse(message.body));
       });
+
+      client.subscribe('/topic/updatedModel', function (message: Message) {
+        hbService.update(JSON.parse(message.body).modelDto);
+      });
+
+      client.subscribe('/topic/removeModel', function (message: Message) {
+        hbService.delete(Number(message.body));
+      });
     };
     
     client.onStompError = function (frame: { headers: { [x: string]: string; }; body: string; }) {

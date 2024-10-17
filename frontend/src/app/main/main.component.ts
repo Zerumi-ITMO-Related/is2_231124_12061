@@ -7,16 +7,11 @@ import { HttpModelService } from '../http-model.service';
 import { Car, Coordinates, HumanBeing, UserProfile } from '../model';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
-import {
-  MatPaginator,
-  MatPaginatorModule,
-} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Observable, map } from 'rxjs';
 import { HumanBeingService } from '../human-being.service';
-import {
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -80,7 +75,7 @@ export class MainComponent implements AfterViewInit {
     );
     this.userService.authenticatedUser.subscribe((user) => {
       this.currentUser = user;
-    })
+    });
   }
 
   @ViewChild(MatPaginator)
@@ -128,7 +123,7 @@ export class MainComponent implements AfterViewInit {
     event.preventDefault();
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
-    this.contextMenu.menuData = { 'item': item };
+    this.contextMenu.menuData = { item: item };
     this.contextMenu.openMenu();
   }
 
@@ -137,9 +132,8 @@ export class MainComponent implements AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-
   readonly dialog = inject(MatDialog);
-  
+
   newModel() {
     this.dialog.open(NewModelComponent, { data: { update: false } });
   }
@@ -149,11 +143,13 @@ export class MainComponent implements AfterViewInit {
   }
 
   onTableContextDelete(item: HumanBeing) {
-    console.log(item);
+    this.http.delete(environment.backendURL + '/api/v1/model/' + item.id).subscribe();
   }
 
   onTableContextEdit(item: HumanBeing) {
-    this.dialog.open(NewModelComponent, { data: { update: true, sourceItem: item } });
+    this.dialog.open(NewModelComponent, {
+      data: { update: true, sourceItem: item },
+    });
   }
 
   logout() {
