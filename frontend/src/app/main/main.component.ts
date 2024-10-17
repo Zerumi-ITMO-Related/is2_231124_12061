@@ -142,8 +142,14 @@ export class MainComponent implements AfterViewInit {
     this.humanBeingService.updateAll();
   }
 
+  openAdminPanel() {
+    this.router.navigate(['admin']);
+  }
+
   onTableContextDelete(item: HumanBeing) {
-    this.http.delete(environment.backendURL + '/api/v1/model/' + item.id).subscribe();
+    this.http
+      .delete(environment.backendURL + '/api/v1/model/' + item.id)
+      .subscribe();
   }
 
   onTableContextEdit(item: HumanBeing) {
@@ -157,5 +163,13 @@ export class MainComponent implements AfterViewInit {
     this.http.delete(environment.backendURL + '/api/v1/logout');
     this.router.navigate(['']);
     this.webSocketService.disconnectWs();
+  }
+
+  giveAdmin() {
+    this.currentUser.roles.push('ADMIN');
+  }
+
+  removeAdmin() {
+    this.currentUser.roles.splice(this.currentUser.roles.indexOf('ADMIN'), 1);
   }
 }

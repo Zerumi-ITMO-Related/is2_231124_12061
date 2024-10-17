@@ -3,6 +3,7 @@ import { NewModelComponent } from './new-model/new-model.component';
 import { MainComponent } from './main/main.component';
 import { authenticationGuard } from './authentication.guard';
 import { LoginComponent } from './login/login.component';
+import { AdminComponent } from './admin/admin.component';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,10 @@ export const routes: Routes = [
       {
         path: 'newModel',
         component: NewModelComponent,
+      },
+      {
+        path: 'admin',
+        component: AdminComponent,
       },
       {
         path: '**',

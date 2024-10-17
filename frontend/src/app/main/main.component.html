@@ -6,24 +6,24 @@
           <p>IS</p>
         </td>
         <td class="no-table-border">
-
+          @if((currentUser.roles || []).includes('ADMIN')) {
+          <button mat-raised-button (click)="openAdminPanel()" class="margin">
+            Admin Panel
+          </button>
+          }
         </td>
-        <td class="no-table-border">
-
-        </td>
-        <td class="no-table-border">
-          
-        </td>
-        <td class="no-table-border">
-          
-        </td>
+        <td class="no-table-border"></td>
+        <td class="no-table-border"></td>
+        <td class="no-table-border"></td>
         <td class="no-table-border right-align margin">
           <a mat-raised-button [matMenuTriggerFor]="userMenu">
             Welcome back,
             {{ currentUser.username }}
           </a>
           <mat-menu #userMenu="matMenu">
-            <button mat-menu-item (click)="logout()" class="margin">Logout</button>
+            <button mat-menu-item (click)="logout()" class="margin">
+              Logout
+            </button>
           </mat-menu>
         </td>
       </tr>
@@ -52,11 +52,7 @@
               </button>
             </td>
             <td class="no-table-border centered-content">
-              <button
-                mat-raised-button
-                (click)="newModel()"
-                class="margin"
-              >
+              <button mat-raised-button (click)="newModel()" class="margin">
                 Add
               </button>
             </td>
