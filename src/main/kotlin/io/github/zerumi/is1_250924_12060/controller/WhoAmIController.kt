@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/whoami")
-class WhoAmIController(val sessionHandler: SessionHandler, val userService: UserService) {
+class WhoAmIController(val userService: UserService) {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun whoAmI(
         @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String
     ): UserModelDTO = toDTO(
-        userService.loadUserByUsername(sessionHandler.getUsernameForSession(auth)!!)
+        userService.loadUserBySessionId(auth)
     )
 
     fun toDTO(user: UserModel): UserModelDTO = UserModelDTO(

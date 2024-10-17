@@ -3,11 +3,15 @@ package io.github.zerumi.is1_250924_12060.service
 import io.github.zerumi.is1_250924_12060.entity.CarEntity
 import io.github.zerumi.is1_250924_12060.entity.CoordinatesEntity
 import io.github.zerumi.is1_250924_12060.entity.HumanBeingEntity
+import io.github.zerumi.is1_250924_12060.entity.UserEntity
 import io.github.zerumi.is1_250924_12060.model.Car
 import io.github.zerumi.is1_250924_12060.model.Coordinates
 import io.github.zerumi.is1_250924_12060.model.HumanBeing
+import io.github.zerumi.is1_250924_12060.model.UserModel
 import io.github.zerumi.is1_250924_12060.repository.ModelRepository
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ModelService(
@@ -24,16 +28,29 @@ class ModelService(
         return convertToModel(entity)
     }
 
-    fun updateById(id: Long, model: HumanBeing): HumanBeing {
+    @Transactional
+    fun updateById(id: Long, model: HumanBeing, user: UserModel): HumanBeing {
+        if (convertToModel(modelRepository.getReferenceById(id)).owner != user)
+            throw AccessDeniedException("You are not owner of the object")
         val newEntity = convertToEntity(model)
-        newEntity.id = id
-        modelRepository.deleteById(id)
-        val saved = modelRepository.save(newEntity)
+        val jpaModel = modelRepository.getReferenceById(id)
+        jpaModel.name = newEntity.name
+        jpaModel.car = newEntity.car
+        jpaModel.mood = newEntity.mood
+        jpaModel.coordinates = newEntity.coordinates
+        jpaModel.hasToothpick = newEntity.hasToothpick
+        jpaModel.impactSpeed = newEntity.impactSpeed
+        jpaModel.minutesOfWaiting = newEntity.minutesOfWaiting
+        jpaModel.realHero = newEntity.realHero
+        jpaModel.weaponType = newEntity.weaponType
+        val saved = modelRepository.save(jpaModel)
         return convertToModel(saved)
     }
 
-    fun deleteById(id: Long) {
-        modelRepository.deleteById(id)
+    fun deleteById(id: Long, user: UserModel) {
+        if (convertToModel(modelRepository.getReferenceById(id)).owner == user)
+            modelRepository.deleteById(id)
+        else throw AccessDeniedException("You are not owner of the object")
     }
 
     fun convertToEntity(model: HumanBeing): HumanBeingEntity = HumanBeingEntity(
@@ -51,7 +68,16 @@ class ModelService(
         mood = model.mood,
         impactSpeed = model.impactSpeed,
         minutesOfWaiting = model.minutesOfWaiting,
-        weaponType = model.weaponType
+        weaponType = model.weaponType,
+        owner = UserEntity(
+            id = model.owner.id,
+            username = model.owner.username,
+            password = model.owner.password,
+            isAccountNonExpired = model.owner.isAccountNonExpired,
+            isAccountNonLocked = model.owner.isAccountNonLocked,
+            isCredentialsNonExpired = model.owner.isCredentialsNonExpired,
+            isEnabled = model.owner.isEnabled
+        )
     )
         
     fun convertToModel(entity: HumanBeingEntity): HumanBeing = HumanBeing(
@@ -70,6 +96,15 @@ class ModelService(
         impactSpeed = entity.impactSpeed,
         minutesOfWaiting = entity.minutesOfWaiting,
         weaponType = entity.weaponType,
+        owner = UserModel(
+            id = entity.owner.id ?: -1,
+            username = entity.owner.username,
+            password = entity.owner.password,
+            accountNonExpired = entity.owner.isAccountNonExpired ?: true,
+            accountNonLocked = entity.owner.isAccountNonLocked ?: true,
+            credentialsNonExpired = entity.owner.isCredentialsNonExpired ?: true,
+            enabled = entity.owner.isEnabled ?: true
+        )
     )
 
     fun getAll(): List<HumanBeing> = modelRepository.findAll().map { convertToModel(it) }

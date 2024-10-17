@@ -7,7 +7,10 @@ import io.github.zerumi.is1_250924_12060.dto.HumanBeingFullDTO
 import io.github.zerumi.is1_250924_12060.model.Car
 import io.github.zerumi.is1_250924_12060.model.Coordinates
 import io.github.zerumi.is1_250924_12060.model.HumanBeing
+import io.github.zerumi.is1_250924_12060.model.UserModel
 import io.github.zerumi.is1_250924_12060.service.ModelService
+import io.github.zerumi.is1_250924_12060.service.UserService
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/model")
 class ModelController(
     val modelService: ModelService,
+    val userService: UserService,
     val simpMessagingTemplate: SimpMessagingTemplate,
 ) {
     @GetMapping
@@ -39,17 +44,17 @@ class ModelController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createModel(@RequestBody dto: HumanBeingDTO) {
-        val entity = convertToModel(dto)
+    fun createModel(@RequestBody dto: HumanBeingDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String) {
+        val entity = convertToModel(dto, userService.loadUserBySessionId(auth))
         val saved = modelService.create(entity)
         simpMessagingTemplate.convertAndSend("/topic/newModel", saved)
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun updateModel(@PathVariable id: Long, @RequestBody dto: HumanBeingDTO) {
-        val entity = convertToModel(dto)
-        val updated = modelService.updateById(id, entity)
+    fun updateModel(@PathVariable id: Long, @RequestBody dto: HumanBeingDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String) {
+        val entity = convertToModel(dto, userService.loadUserBySessionId(auth))
+        val updated = modelService.updateById(id, entity, userService.loadUserBySessionId(auth))
         simpMessagingTemplate.convertAndSend("/topic/updatedModel", object {
             val id = id
             val modelDto = dto
@@ -58,8 +63,8 @@ class ModelController(
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteModel(@PathVariable id: Long) {
-        modelService.deleteById(id)
+    fun deleteModel(@PathVariable id: Long, @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String) {
+        modelService.deleteById(id, userService.loadUserBySessionId(auth))
         simpMessagingTemplate.convertAndSend("/topic/removeModel", id)
     }
 
@@ -82,7 +87,7 @@ class ModelController(
         weaponType = model.weaponType
     )
 
-    fun convertToModel(dto: HumanBeingDTO): HumanBeing = HumanBeing(
+    fun convertToModel(dto: HumanBeingDTO, owner: UserModel): HumanBeing = HumanBeing(
         name = dto.name,
         coordinates = Coordinates(
             x = dto.coordinates.x,
@@ -96,6 +101,7 @@ class ModelController(
         mood = dto.mood,
         impactSpeed = dto.impactSpeed,
         minutesOfWaiting = dto.minutesOfWaiting,
-        weaponType = dto.weaponType
+        weaponType = dto.weaponType,
+        owner = owner
     )
 }

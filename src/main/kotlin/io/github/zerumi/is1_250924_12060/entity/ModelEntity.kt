@@ -28,6 +28,9 @@ class HumanBeingEntity(
     var minutesOfWaiting: Int,
     @Enumerated(EnumType.STRING)
     var weaponType: WeaponType,
+    @OneToOne(cascade = [CascadeType.MERGE])
+    @JoinColumn(name = "owner_id", unique = false, nullable = false)
+    var owner: UserEntity
 ) : Serializable
 
 @Entity

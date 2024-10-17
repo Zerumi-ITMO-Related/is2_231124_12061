@@ -15,6 +15,7 @@ data class HumanBeing(
     val impactSpeed: Long,              // Поле не может быть null
     val minutesOfWaiting: Int,          // << no additional requirements >>
     val weaponType: WeaponType,         // Поле не может быть null
+    val owner: UserModel,
 ) {
     init {
         require(name.isNotBlank()) { "Name parameter shouldn't be blank or empty!" }

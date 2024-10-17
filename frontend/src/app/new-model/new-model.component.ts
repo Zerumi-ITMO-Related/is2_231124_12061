@@ -118,9 +118,15 @@ export class NewModelComponent implements OnInit {
       newHumanBeing.impactSpeed = newModel.impactSpeed;
       newHumanBeing.minutesOfWaiting = newModel.minutesOfWaiting;
       newHumanBeing.weaponType = newModel.weaponType;
-      this.http
-        .post('http://localhost:8080/api/v1/model', newHumanBeing)
-        .subscribe();
+      if (this.data.update) {
+        this.http
+          .put('http://localhost:8080/api/v1/model/' + this.data.sourceItem.id, newHumanBeing)
+          .subscribe();
+      } else {
+        this.http
+          .post('http://localhost:8080/api/v1/model', newHumanBeing)
+          .subscribe();
+      }
       this.dialogRef.close();
     } else {
       console.log('New model form invalid');

@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class UserService (val repository: UserRepository) : UserDetailsService {
+class UserService (val repository: UserRepository, val sessionHandler: SessionHandler) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserModel {
         val foundUser: UserEntity = repository.findByUsername(username)
@@ -26,4 +26,6 @@ class UserService (val repository: UserRepository) : UserDetailsService {
         credentialsNonExpired = entity.isCredentialsNonExpired ?: true,
         enabled = entity.isEnabled ?: true
     )
+
+    fun loadUserBySessionId(auth: String): UserModel = loadUserByUsername(sessionHandler.getUsernameForSession(auth)!!)
 }
