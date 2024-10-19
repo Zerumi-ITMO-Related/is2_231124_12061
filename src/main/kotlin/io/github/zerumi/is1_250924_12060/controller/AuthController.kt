@@ -30,7 +30,7 @@ class AuthController(
         return login(dto)
     }
 
-    private fun convertToModel(dto: UserRequestDTO): UserRequest = UserRequest(dto.login, dto.password)
+    private fun convertToModel(dto: UserRequestDTO): UserRequest = UserRequest(dto.login, dto.password, dto.adminRequired)
 
     private fun convertToDto(authSessionResponse: AuthSessionResponse): AuthSessionResponseDTO = AuthSessionResponseDTO(
         token = authSessionResponse.token

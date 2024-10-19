@@ -1,6 +1,7 @@
 export class LoginData {
-  username!: string;
+  login!: string;
   password!: string;
+  adminRequired!: boolean;
 }
 
 export class AuthResponse {

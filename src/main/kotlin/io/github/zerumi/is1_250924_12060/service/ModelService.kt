@@ -9,13 +9,15 @@ import io.github.zerumi.is1_250924_12060.model.Coordinates
 import io.github.zerumi.is1_250924_12060.model.HumanBeing
 import io.github.zerumi.is1_250924_12060.model.UserModel
 import io.github.zerumi.is1_250924_12060.repository.ModelRepository
+import io.github.zerumi.is1_250924_12060.repository.UserRepository
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ModelService(
-    val modelRepository: ModelRepository
+    val modelRepository: ModelRepository,
+    val userRepository: UserRepository,
 ) {
     fun create(model: HumanBeing): HumanBeing {
         val entity = convertToEntity(model)
@@ -69,15 +71,7 @@ class ModelService(
         impactSpeed = model.impactSpeed,
         minutesOfWaiting = model.minutesOfWaiting,
         weaponType = model.weaponType,
-        owner = UserEntity(
-            id = model.owner.id,
-            username = model.owner.username,
-            password = model.owner.password,
-            isAccountNonExpired = model.owner.isAccountNonExpired,
-            isAccountNonLocked = model.owner.isAccountNonLocked,
-            isCredentialsNonExpired = model.owner.isCredentialsNonExpired,
-            isEnabled = model.owner.isEnabled
-        )
+        owner = userRepository.getReferenceById(model.owner.id)
     )
         
     fun convertToModel(entity: HumanBeingEntity): HumanBeing = HumanBeing(
@@ -103,7 +97,8 @@ class ModelService(
             accountNonExpired = entity.owner.isAccountNonExpired ?: true,
             accountNonLocked = entity.owner.isAccountNonLocked ?: true,
             credentialsNonExpired = entity.owner.isCredentialsNonExpired ?: true,
-            enabled = entity.owner.isEnabled ?: true
+            enabled = entity.owner.isEnabled ?: true,
+            roles = entity.owner.roles.map { it.roleName }
         )
     )
 

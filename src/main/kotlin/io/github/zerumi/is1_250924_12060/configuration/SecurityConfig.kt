@@ -37,7 +37,7 @@ class SecurityConfig(
         http.csrf { csrf ->
             csrf.ignoringRequestMatchers("/**")
         }
-        http.headers{ headersConfigurer -> headersConfigurer.frameOptions { it.sameOrigin() } }
+        http.headers { headersConfigurer -> headersConfigurer.frameOptions { it.sameOrigin() } }
 
         val config = CorsConfiguration()
 
@@ -58,11 +58,14 @@ class SecurityConfig(
                 )
             }
         }
+
         http.authorizeHttpRequests { ar ->
-            ar.requestMatchers(mvc.pattern("/api/v1/login")).permitAll()
-            ar.requestMatchers(mvc.pattern("/api/v1/register")).permitAll()
-            ar.requestMatchers(mvc.pattern("/socket")).permitAll()
-            ar.anyRequest().authenticated()
+            ar
+                .requestMatchers(mvc.pattern("/api/v1/login")).permitAll()
+                .requestMatchers(mvc.pattern("/api/v1/register")).permitAll()
+                .requestMatchers(mvc.pattern("/api/v1/admin")).hasAuthority("ADMIN")
+                .requestMatchers(mvc.pattern("/socket")).permitAll()
+                .anyRequest().authenticated()
         }.httpBasic(Customizer.withDefaults())
 
         http.addFilter(corsFilter)
@@ -72,11 +75,9 @@ class SecurityConfig(
 
     @Bean
     fun messageAuthorizationManager(messages: MessageMatcherDelegatingAuthorizationManager.Builder): AuthorizationManager<Message<*>>? {
-        messages.simpTypeMatchers(SimpMessageType.CONNECT,
-            SimpMessageType.HEARTBEAT,
-            SimpMessageType.UNSUBSCRIBE,
-            SimpMessageType.DISCONNECT).permitAll()
-            .anyMessage().authenticated()
+        messages.simpTypeMatchers(
+            SimpMessageType.CONNECT, SimpMessageType.HEARTBEAT, SimpMessageType.UNSUBSCRIBE, SimpMessageType.DISCONNECT
+        ).permitAll().anyMessage().authenticated()
 
         return messages.build()
     }

@@ -12,10 +12,10 @@ data class UserModel(
     private val accountNonLocked: Boolean = true,
     private val credentialsNonExpired: Boolean = true,
     private val enabled: Boolean = true,
+    private val roles: List<String>,
 ) : UserDetails {
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf(
-        SimpleGrantedAuthority("USER")
-    )
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
+        roles.map { SimpleGrantedAuthority(it) }.plus(SimpleGrantedAuthority("USER")).toMutableList()
 
     override fun getUsername(): String = username
     override fun getPassword(): String = password
@@ -26,8 +26,7 @@ data class UserModel(
 }
 
 data class UserRequest(
-    val login: String,
-    val password: String
+    val login: String, val password: String, val adminRequired: Boolean = false
 )
 
 data class AuthSessionResponse(

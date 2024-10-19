@@ -16,7 +16,7 @@
           </div>
           <div class="margin select-radio-container right-align">
             <label for="l-username">Username: </label>
-            <input id="l-username" type="text" name="username" formControlName="login" [value]="loginModel.username" required autocomplete="username"/>
+            <input id="l-username" type="text" name="username" formControlName="login" required autocomplete="username"/>
           </div>
           <div class="margin select-radio-container right-align">
             <label for="l-password">Password: </label>
@@ -56,6 +56,10 @@
           <div class="margin select-radio-container right-align">
             <label for="r-repeat-password">Repeat password: </label>
             <input id="r-repeat-password" type="password" name="password" formControlName="repeatedPassword" required autocomplete="new-password" />
+          </div>
+          <div class="margin select-radio-container right-align">
+            <label for="r-admin-required">Request admin privileges: </label>
+            <input id="r-admin-required" type="checkbox" name="admin-required" formControlName="adminRequired" required />
           </div>
           <div class="margin right-align">
             <button>Register</button>

@@ -13,7 +13,6 @@ class UserService (val repository: UserRepository, val sessionHandler: SessionHa
     override fun loadUserByUsername(username: String): UserModel {
         val foundUser: UserEntity = repository.findByUsername(username)
             ?: throw UsernameNotFoundException("Cannot find user with name $username")
-
         return convertEntityToModel(foundUser)
     }
 
@@ -24,7 +23,8 @@ class UserService (val repository: UserRepository, val sessionHandler: SessionHa
         accountNonExpired = entity.isAccountNonExpired ?: true,
         accountNonLocked = entity.isAccountNonLocked ?: true,
         credentialsNonExpired = entity.isCredentialsNonExpired ?: true,
-        enabled = entity.isEnabled ?: true
+        enabled = entity.isEnabled ?: true,
+        roles = entity.roles.map { it.roleName }
     )
 
     fun loadUserBySessionId(auth: String): UserModel = loadUserByUsername(sessionHandler.getUsernameForSession(auth)!!)

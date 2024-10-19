@@ -31,12 +31,8 @@ export class LoginComponent {
     login: new FormControl(''),
     password: new FormControl(''),
     repeatedPassword: new FormControl(''),
+    adminRequired: new FormControl(false),
   });
-
-  loginModel: LoginData = {
-    username: '',
-    password: '',
-  };
 
   sessionID = '';
 
@@ -71,11 +67,16 @@ export class LoginComponent {
 
   register() {
     const url = environment.backendURL + '/api/v1/register';
-    if (this.registerForm.controls.password !== this.registerForm.controls.repeatedPassword) {
+    if (this.registerForm.controls.password.value !== this.registerForm.controls.repeatedPassword.value) {
       alert('Passwords do not match');
       return;
     }
-    this.http.post<AuthResponse>(url, this.loginModel).subscribe((response: AuthResponse) => {
+    const loginModel: LoginData = {
+      login: this.registerForm.controls.login.value!!,
+      password: this.registerForm.controls.password.value!!,
+      adminRequired: this.registerForm.controls.adminRequired.value!!,
+    };
+    this.http.post<AuthResponse>(url, loginModel).subscribe((response: AuthResponse) => {
       if (response.token) {
         localStorage.setItem('token', response.token);
         this.router.navigate(['main']);

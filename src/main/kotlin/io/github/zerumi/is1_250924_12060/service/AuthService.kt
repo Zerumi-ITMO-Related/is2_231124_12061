@@ -1,6 +1,7 @@
 package io.github.zerumi.is1_250924_12060.service
 
 import io.github.zerumi.is1_250924_12060.configuration.SecurityConfig
+import io.github.zerumi.is1_250924_12060.entity.RoleEntity
 import io.github.zerumi.is1_250924_12060.entity.UserEntity
 import io.github.zerumi.is1_250924_12060.model.AuthSessionResponse
 import io.github.zerumi.is1_250924_12060.model.UserRequest
@@ -14,6 +15,8 @@ import java.util.*
 
 @Service
 class AuthService(
+    private val userService: UserService,
+    private val adminService: AdminService,
     private val securityConfig: SecurityConfig,
     private val authenticationManager: AuthenticationManager,
     private val handler: SessionHandler,
@@ -37,9 +40,15 @@ class AuthService(
     fun register(userRequest: UserRequest) {
         val newUser = UserEntity(
             username = userRequest.login,
-            password = securityConfig.passwordEncoder().encode(userRequest.password)
+            password = securityConfig.passwordEncoder().encode(userRequest.password),
+            roles = emptyList<RoleEntity>().toMutableList()
         )
-        repository.save(newUser)
+
+        if (userRequest.adminRequired) {
+            adminService.newAdminRequest(userService.convertEntityToModel(newUser))
+        } else {
+            repository.save(newUser)
+        }
     }
 }
 

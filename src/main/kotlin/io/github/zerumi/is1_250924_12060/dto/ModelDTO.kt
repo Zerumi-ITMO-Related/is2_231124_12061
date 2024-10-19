@@ -29,7 +29,7 @@ data class HumanBeingFullDTO(
     val impactSpeed: Long,
     val minutesOfWaiting: Int,
     val weaponType: WeaponType,
-)
+) : Serializable
 
 data class CoordinatesDTO(
     val x: Long,
