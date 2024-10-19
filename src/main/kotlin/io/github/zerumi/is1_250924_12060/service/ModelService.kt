@@ -3,7 +3,6 @@ package io.github.zerumi.is1_250924_12060.service
 import io.github.zerumi.is1_250924_12060.entity.CarEntity
 import io.github.zerumi.is1_250924_12060.entity.CoordinatesEntity
 import io.github.zerumi.is1_250924_12060.entity.HumanBeingEntity
-import io.github.zerumi.is1_250924_12060.entity.UserEntity
 import io.github.zerumi.is1_250924_12060.model.Car
 import io.github.zerumi.is1_250924_12060.model.Coordinates
 import io.github.zerumi.is1_250924_12060.model.HumanBeing

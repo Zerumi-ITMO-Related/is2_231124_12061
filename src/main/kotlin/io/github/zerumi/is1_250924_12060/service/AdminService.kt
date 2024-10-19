@@ -28,13 +28,10 @@ class AdminService(
 
     @Transactional
     fun approveAdminRequest(requestModel: AdminRequestModel, comment: String = "Your request successfully approved") {
-        val userEntity = convertToEntity(requestModel.user)
-        val request = adminRequestRepository.findByUser(userEntity)
-            ?: throw IllegalArgumentException("Requested user was not requested admin rights")
+        val request = adminRequestRepository.getReferenceById(requestModel.id)
 
         val adminRole = roleRepository.findByRoleName("ADMIN")!!
-        userEntity.roles.add(adminRole)
-        userRepository.save(userEntity)
+        request.user.roles.add(adminRole)
 
         request.status = AdminRequestStatus.ACCEPTED
         request.comment = comment
@@ -44,9 +41,7 @@ class AdminService(
 
     @Transactional
     fun declineAdminRequest(requestModel: AdminRequestModel, comment: String = "Your request was rejected") {
-        val userEntity = convertToEntity(requestModel.user)
-        val request = adminRequestRepository.findByUser(userEntity)
-            ?: throw IllegalArgumentException("Requested user was not requested admin rights")
+        val request = adminRequestRepository.getReferenceById(requestModel.id)
 
         request.status = AdminRequestStatus.REJECTED
         request.comment = comment
@@ -62,6 +57,7 @@ class AdminService(
     )
 
     private fun convertToModel(adminRequestEntity: AdminRequestEntity): AdminRequestModel = AdminRequestModel(
+        id = adminRequestEntity.id ?: -1,
         user = UserModel(
             id = adminRequestEntity.user.id ?: -1,
             username = adminRequestEntity.user.username,
