@@ -1,1 +1,150 @@
-<p>admin works!</p>
+<div id="container" class="margin">
+  <div id="header" class="blured-container round-container margin">
+    <table class="max-width no-table-border">
+      <tr class="no-table-border">
+        <td class="no-table-border">
+          <p>IS</p>
+        </td>
+        <td class="no-table-border">
+          <button mat-raised-button (click)="openMainPanel()" class="margin">
+            Back to Main Panel
+          </button>
+        </td>
+        <td class="no-table-border"></td>
+        <td class="no-table-border"></td>
+        <td class="no-table-border"></td>
+        <td class="no-table-border right-align margin">
+          <a mat-raised-button [matMenuTriggerFor]="userMenu">
+            Welcome back,
+            {{ currentUser.username }}
+          </a>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item (click)="logout()" class="margin">
+              Logout
+            </button>
+          </mat-menu>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="main" class="margin">
+    <div
+      id="table-container"
+      class="round-container blured-container margin max-width"
+    >
+      <div class="margin">
+        <table class="no-table-border">
+          <tr class="no-table-border centered-content">
+            <td class="no-table-border centered-content">
+              <mat-form-field subscriptSizing="dynamic">
+                <input
+                  matInput
+                  (keyup)="applyFilter($event)"
+                  placeholder="Filter"
+                />
+              </mat-form-field>
+            </td>
+            <td class="no-table-border centered-content">
+              <button mat-raised-button (click)="updateAll()" class="margin">
+                Refresh
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <table
+        mat-table
+        [dataSource]="(adminRqMaterialDataSource$ | async) ?? []"
+        class="mat-elevation-z8"
+      >
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let request">{{ request.id }}</td>
+        </ng-container>
+
+        <!-- User ID Column -->
+        <ng-container matColumnDef="userId">
+          <th mat-header-cell *matHeaderCellDef>User ID</th>
+          <td mat-cell *matCellDef="let request">{{ request.user.id }}</td>
+        </ng-container>
+
+        <!-- Username Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>Username</th>
+          <td mat-cell *matCellDef="let request">
+            {{ request.user.username }}
+          </td>
+        </ng-container>
+
+        <!-- Request Date Column -->
+        <ng-container matColumnDef="requestDate">
+          <th mat-header-cell *matHeaderCellDef>Request Date</th>
+          <td mat-cell *matCellDef="let request">
+            {{ request.requestDate | date : "short" }}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let request">{{ request.status }}</td>
+        </ng-container>
+
+        <!-- Comment Column -->
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef>Comment</th>
+          <td mat-cell *matCellDef="let request">{{ request.comment }}</td>
+        </ng-container>
+
+        <!-- Accept action Column -->
+        <ng-container matColumnDef="accept" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-button
+              (click)="acceptRequest(element)">
+              <mat-icon fontIcon="check"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Reject action Column -->
+        <ng-container matColumnDef="reject" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-raised-button
+              (click)="rejectRequest(element)">
+              <mat-icon fontIcon="block"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  <div id="footer" class="blured-container round-container margin">
+    <table class="max-width no-table-border">
+      <tr class="no-table-border">
+        <td class="no-table-border">
+          <p>
+            Copyright © Zerumi, 2024. Licensed under
+            <a href="assets/LICENSE">ISC license</a>. Plagiarism is prohibited.
+          </p>
+        </td>
+        <td class="no-table-border right-align margin">
+          <form id="time-form" class="margin">
+            <p>
+              Current time:
+              {{ time | date : "HH:mm:ss | d/M/yyyy" }}
+            </p>
+            <div class="margin select-container"></div>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

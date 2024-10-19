@@ -41,3 +41,11 @@ export interface DialogData {
   animal: string;
   name: string;
 }
+
+export class AdminRequest {
+  id!: number;
+  user!: UserProfile;
+  requestDate!: string;
+  status!: string;
+  comment!: string;
+}

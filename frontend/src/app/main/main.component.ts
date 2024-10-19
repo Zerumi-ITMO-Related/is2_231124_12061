@@ -56,7 +56,7 @@ export class MainComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<HumanBeing>();
 
   hbMaterialDataSource$: Observable<MatTableDataSource<HumanBeing>>;
-  currentUser: UserProfile = new UserProfile();
+  currentUser: UserProfile;
 
   constructor(
     private router: Router,
@@ -66,6 +66,7 @@ export class MainComponent implements AfterViewInit {
     private userService: UserService,
     private http: HttpClient
   ) {
+    this.currentUser = userService.authenticatedUserSubject.value;
     this.hbMaterialDataSource$ = this.humanBeingService.model.pipe(
       map((things) => {
         const dataSource = this.dataSource;
@@ -163,13 +164,5 @@ export class MainComponent implements AfterViewInit {
     this.http.delete(environment.backendURL + '/api/v1/logout');
     this.router.navigate(['']);
     this.webSocketService.disconnectWs();
-  }
-
-  giveAdmin() {
-    this.currentUser.roles.push('ADMIN');
-  }
-
-  removeAdmin() {
-    this.currentUser.roles.splice(this.currentUser.roles.indexOf('ADMIN'), 1);
   }
 }

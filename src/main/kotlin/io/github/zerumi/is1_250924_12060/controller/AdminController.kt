@@ -1,6 +1,5 @@
 package io.github.zerumi.is1_250924_12060.controller
 
-import io.github.zerumi.is1_250924_12060.dto.AdminRequestBodyDTO
 import io.github.zerumi.is1_250924_12060.dto.AdminRequestDTO
 import io.github.zerumi.is1_250924_12060.dto.UserModelDTO
 import io.github.zerumi.is1_250924_12060.model.AdminRequestModel
@@ -19,10 +18,10 @@ class AdminController(val adminService: AdminService, val userService: UserServi
     fun getAdminRequests(): List<AdminRequestDTO> = adminService.getAllRequests().map { convertToDto(it) }
 
     @PutMapping("/approve")
-    fun approveRequest(@RequestBody request: AdminRequestBodyDTO) = adminService.approveAdminRequest(convertToModel(request.request), request.newComment)
+    fun approveRequest(@RequestBody request: AdminRequestDTO) = adminService.approveAdminRequest(convertToModel(request))
 
     @PutMapping("/decline")
-    fun rejectRequest(@RequestBody request: AdminRequestBodyDTO) = adminService.declineAdminRequest(convertToModel(request.request), request.newComment)
+    fun rejectRequest(@RequestBody request: AdminRequestDTO) = adminService.declineAdminRequest(convertToModel(request))
 
     private fun convertToModel(request: AdminRequestDTO): AdminRequestModel = AdminRequestModel(
         id = request.id,
