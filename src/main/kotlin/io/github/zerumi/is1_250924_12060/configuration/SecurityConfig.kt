@@ -51,14 +51,6 @@ class SecurityConfig(
 
         val corsFilter = CorsFilter(source)
 
-        http.exceptionHandling { eh: ExceptionHandlingConfigurer<HttpSecurity?> ->
-            eh.authenticationEntryPoint { rq: HttpServletRequest?, rs: HttpServletResponse, ex: AuthenticationException ->
-                rs.sendError(
-                    HttpServletResponse.SC_UNAUTHORIZED, ex.localizedMessage
-                )
-            }
-        }
-
         http.authorizeHttpRequests { ar ->
             ar
                 .requestMatchers(mvc.pattern("/api/v1/login")).permitAll()

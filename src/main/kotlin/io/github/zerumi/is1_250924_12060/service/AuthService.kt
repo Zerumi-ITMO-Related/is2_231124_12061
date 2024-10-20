@@ -7,7 +7,9 @@ import io.github.zerumi.is1_250924_12060.model.AuthSessionResponse
 import io.github.zerumi.is1_250924_12060.model.UserRequest
 import io.github.zerumi.is1_250924_12060.repository.UserRepository
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.AuthenticationException
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
@@ -38,9 +40,14 @@ class AuthService(
         handler.invalidate(authentication)
 
     fun register(userRequest: UserRequest) {
+        val username = userRequest.login
+        val encryptedPass = securityConfig.passwordEncoder().encode(userRequest.password)
+
+        if (repository.findByUsername(username) != null) throw BadCredentialsException("User with that username already exists")
+
         val newUser = UserEntity(
-            username = userRequest.login,
-            password = securityConfig.passwordEncoder().encode(userRequest.password),
+            username = username,
+            password = encryptedPass,
             roles = emptyList<RoleEntity>().toMutableList()
         )
 

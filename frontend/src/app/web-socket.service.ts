@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
 import { HumanBeingService } from './human-being.service';
+import { AdminRequestService } from './admin-request.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class WebSocketService {
     heartbeatOutgoing: 4000,
   });
 
-  constructor(hbService: HumanBeingService) {
+  constructor(hbService: HumanBeingService, adminRqService: AdminRequestService) {
     this.hbService = hbService;
 
     const client = this.client;
@@ -38,6 +39,14 @@ export class WebSocketService {
 
       client.subscribe('/topic/removeModel', function (message: Message) {
         hbService.delete(Number(message.body));
+      });
+
+      client.subscribe('/topic/updatedAdminRequest', function (message: Message) {
+        adminRqService.update(JSON.parse(message.body));
+      });
+
+      client.subscribe('/topic/newAdminRequest', function (message: Message) {
+        adminRqService.update(JSON.parse(message.body));
       });
     };
     

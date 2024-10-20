@@ -5,6 +5,7 @@ import io.github.zerumi.is1_250924_12060.dto.UserModelDTO
 import io.github.zerumi.is1_250924_12060.model.AdminRequestModel
 import io.github.zerumi.is1_250924_12060.service.AdminService
 import io.github.zerumi.is1_250924_12060.service.UserService
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,15 +14,21 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/admin")
-class AdminController(val adminService: AdminService, val userService: UserService) {
+class AdminController(val adminService: AdminService, val userService: UserService, val simpMessagingTemplate: SimpMessagingTemplate) {
     @GetMapping
     fun getAdminRequests(): List<AdminRequestDTO> = adminService.getAllRequests().map { convertToDto(it) }
 
     @PutMapping("/approve")
-    fun approveRequest(@RequestBody request: AdminRequestDTO) = adminService.approveAdminRequest(convertToModel(request))
+    fun approveRequest(@RequestBody request: AdminRequestDTO) {
+        val updated = adminService.approveAdminRequest(convertToModel(request))
+        simpMessagingTemplate.convertAndSend("/topic/updatedAdminRequest", updated)
+    }
 
     @PutMapping("/decline")
-    fun rejectRequest(@RequestBody request: AdminRequestDTO) = adminService.declineAdminRequest(convertToModel(request))
+    fun rejectRequest(@RequestBody request: AdminRequestDTO) {
+        val updated = adminService.declineAdminRequest(convertToModel(request))
+        simpMessagingTemplate.convertAndSend("/topic/updatedAdminRequest", updated)
+    }
 
     private fun convertToModel(request: AdminRequestDTO): AdminRequestModel = AdminRequestModel(
         id = request.id,

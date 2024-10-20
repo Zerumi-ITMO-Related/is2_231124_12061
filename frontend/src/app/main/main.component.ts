@@ -164,5 +164,6 @@ export class MainComponent implements AfterViewInit {
     this.http.delete(environment.backendURL + '/api/v1/logout');
     this.router.navigate(['']);
     this.webSocketService.disconnectWs();
+    window.location.reload();
   }
 }
