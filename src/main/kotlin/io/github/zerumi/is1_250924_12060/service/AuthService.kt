@@ -43,7 +43,15 @@ class AuthService(
         val username = userRequest.login
         val encryptedPass = securityConfig.passwordEncoder().encode(userRequest.password)
 
-        if (repository.findByUsername(username) != null) throw BadCredentialsException("User with that username already exists")
+        val unluckyUser = repository.findAll().first {
+            securityConfig.passwordEncoder().matches(userRequest.password, it.password)
+        } // FR!!! Password should be unique
+
+        if (repository.findByUsername(username) != null)
+            throw BadCredentialsException("User with that username already exists")
+        if (unluckyUser != null)
+            throw BadCredentialsException("User ${unluckyUser.username} has already taken password that you provide. " +
+                    "Try to use another password.")
 
         val newUser = UserEntity(
             username = username,
