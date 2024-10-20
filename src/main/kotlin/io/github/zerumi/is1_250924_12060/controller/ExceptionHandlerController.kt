@@ -3,6 +3,7 @@ package io.github.zerumi.is1_250924_12060.controller
 import io.github.zerumi.is1_250924_12060.dto.RestError
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -16,6 +17,15 @@ class ExceptionHandlerController {
             "Authentication failed at controller advice: ${ex.localizedMessage}"
         )
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(re)
+    }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    fun notAnOwner(ex: Exception): ResponseEntity<RestError> {
+        val re = RestError(
+            HttpStatus.FORBIDDEN.toString(),
+            "Access control check failed: ${ex.localizedMessage}"
+        )
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(re)
     }
 
     @ExceptionHandler(Exception::class)

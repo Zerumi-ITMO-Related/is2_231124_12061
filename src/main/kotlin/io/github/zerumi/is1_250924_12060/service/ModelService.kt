@@ -31,7 +31,8 @@ class ModelService(
 
     @Transactional
     fun updateById(id: Long, model: HumanBeing, user: UserModel): HumanBeing {
-        if (convertToModel(modelRepository.getReferenceById(id)).owner != user)
+        if (convertToModel(modelRepository.getReferenceById(id)).owner != user
+            && user.authorities.find { it.authority == "ADMIN" } == null)
             throw AccessDeniedException("You are not owner of the object")
         val newEntity = convertToEntity(model)
         val jpaModel = modelRepository.getReferenceById(id)
@@ -49,7 +50,8 @@ class ModelService(
     }
 
     fun deleteById(id: Long, user: UserModel) {
-        if (convertToModel(modelRepository.getReferenceById(id)).owner == user)
+        if (convertToModel(modelRepository.getReferenceById(id)).owner == user
+            || user.authorities.find { it.authority == "ADMIN" } != null)
             modelRepository.deleteById(id)
         else throw AccessDeniedException("You are not owner of the object")
     }
