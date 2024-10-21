@@ -9,6 +9,7 @@ import io.github.zerumi.is1_250924_12060.model.HumanBeing
 import io.github.zerumi.is1_250924_12060.model.UserModel
 import io.github.zerumi.is1_250924_12060.repository.ModelRepository
 import io.github.zerumi.is1_250924_12060.repository.UserRepository
+import org.springframework.data.jpa.repository.query.Procedure
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -28,6 +29,14 @@ class ModelService(
         val entity = modelRepository.getReferenceById(id)
         return convertToModel(entity)
     }
+
+    fun deleteHumanBeingByWeaponType(weaponType: String) = modelRepository.deleteHumanBeingByWeaponType(weaponType)
+
+    fun calculateTotalMinutesOfWaiting(): Long = modelRepository.calculateTotalMinutesOfWaiting()
+
+    fun deleteHeroesWithoutToothpick() = modelRepository.deleteHeroesWithoutToothpick()
+
+    fun updateAllHeroesToSadMood() = modelRepository.updateAllHeroesToSadMood()
 
     @Transactional
     fun updateById(id: Long, model: HumanBeing, user: UserModel): HumanBeing {

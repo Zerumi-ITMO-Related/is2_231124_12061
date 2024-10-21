@@ -41,6 +41,10 @@ export class WebSocketService {
         hbService.delete(Number(message.body));
       });
 
+      client.subscribe('/topic/invalidatedModel', function (message: Message) {
+        hbService.updateAll();
+      });
+
       client.subscribe('/topic/updatedAdminRequest', function (message: Message) {
         adminRqService.update(JSON.parse(message.body));
       });

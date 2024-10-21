@@ -159,6 +159,14 @@ export class MainComponent implements AfterViewInit {
     });
   }
 
+  getSumOfMinutesWaiting() {
+    this.http.get(environment.backendURL + '/api/v1/model/totalMinutesOfWaiting', {}).subscribe(
+      (data) => {
+        alert('Sum of minutes of waiting: ' + data);
+      }
+    );
+  }
+
   logout() {
     localStorage.removeItem('token');
     this.http.delete(environment.backendURL + '/api/v1/logout');

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -66,6 +67,33 @@ class ModelController(
     fun deleteModel(@PathVariable id: Long, @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String) {
         modelService.deleteById(id, userService.loadUserBySessionId(auth))
         simpMessagingTemplate.convertAndSend("/topic/removeModel", id)
+    }
+
+    @DeleteMapping("/deleteByWeaponType")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteHumanBeingByWeaponType(weaponType: String) {
+        simpMessagingTemplate.convertAndSend("/topic/invalidatedModel")
+        modelService.deleteHumanBeingByWeaponType(weaponType)
+    }
+
+    @GetMapping("/totalMinutesOfWaiting")
+    @ResponseStatus(HttpStatus.OK)
+    fun calculateTotalMinutesOfWaiting(): Long {
+        return modelService.calculateTotalMinutesOfWaiting()
+    }
+
+    @DeleteMapping("/deleteWoToothpick")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteHeroesWithoutToothpick() {
+        simpMessagingTemplate.convertAndSend("/topic/invalidatedModel")
+        modelService.deleteHeroesWithoutToothpick()
+    }
+
+    @PatchMapping("/makeThemAllSad")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateAllHeroesToSadMood() {
+        simpMessagingTemplate.convertAndSend("/topic/invalidatedModel")
+        modelService.updateAllHeroesToSadMood()
     }
 
     fun convertToDto(model: HumanBeing): HumanBeingFullDTO = HumanBeingFullDTO(
