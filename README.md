@@ -1,3 +1,3 @@
-# is1_250924_12060
+# is2_231124_12061
 
-Informational Systems Lab #1, ITMO SE (var no 12060)
+Informational Systems Lab #2, ITMO SE (var no 12061)
