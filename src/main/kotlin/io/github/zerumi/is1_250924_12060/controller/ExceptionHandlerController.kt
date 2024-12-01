@@ -12,6 +12,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class ExceptionHandlerController {
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun illegalArg(ex: Exception): ResponseEntity<RestError> {
+        val re = RestError(
+            HttpStatus.BAD_REQUEST.toString(),
+            "Illegal argument: ${ex.localizedMessage}"
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(re)
+    }
+
     @ExceptionHandler(AuthenticationException::class)
     fun authException(ex: Exception): ResponseEntity<RestError> {
         val re = RestError(

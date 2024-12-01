@@ -9,6 +9,7 @@ import io.github.zerumi.is1_250924_12060.model.HumanBeing
 import io.github.zerumi.is1_250924_12060.model.UserModel
 import io.github.zerumi.is1_250924_12060.repository.ModelRepository
 import io.github.zerumi.is1_250924_12060.repository.UserRepository
+import io.github.zerumi.is1_250924_12060.validation.ModelValidator
 import org.springframework.data.jpa.repository.query.Procedure
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
@@ -18,11 +19,15 @@ import org.springframework.transaction.annotation.Transactional
 class ModelService(
     val modelRepository: ModelRepository,
     val userRepository: UserRepository,
+    val modelValidator: ModelValidator,
 ) {
+    @Transactional
     fun create(model: HumanBeing): HumanBeing {
         val entity = convertToEntity(model)
-        val saved = modelRepository.save(entity)
-        return convertToModel(saved)
+        if (modelValidator.validateModel(entity)) {
+            val saved = modelRepository.save(entity)
+            return convertToModel(saved)
+        } else throw IllegalArgumentException("Unique coordinates count exceeded!")
     }
 
     fun getById(id: Long) : HumanBeing {

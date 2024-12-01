@@ -118,6 +118,7 @@ export class NewModelComponent implements OnInit {
       newHumanBeing.impactSpeed = newModel.impactSpeed;
       newHumanBeing.minutesOfWaiting = newModel.minutesOfWaiting;
       newHumanBeing.weaponType = newModel.weaponType;
+      console.log(newHumanBeing);
       if (this.data.update) {
         this.http
           .put('http://localhost:8080/api/v1/model/' + this.data.sourceItem.id, newHumanBeing)

@@ -1,0 +1,18 @@
+<configuration>
+    <!-- Suppress all logs except for progress -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Log level configuration -->
+    <root level="OFF">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <!-- Enable progress logs -->
+    <logger name="io.gatling.core.stats" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+</configuration>

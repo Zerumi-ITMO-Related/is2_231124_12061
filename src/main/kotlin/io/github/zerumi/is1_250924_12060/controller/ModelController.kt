@@ -12,6 +12,7 @@ import io.github.zerumi.is1_250924_12060.service.ModelService
 import io.github.zerumi.is1_250924_12060.service.UserService
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -45,10 +46,11 @@ class ModelController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createModel(@RequestBody dto: HumanBeingDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String) {
+    fun createModel(@RequestBody dto: HumanBeingDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) auth: String): HumanBeingFullDTO {
         val entity = convertToModel(dto, userService.loadUserBySessionId(auth))
         val saved = modelService.create(entity)
         simpMessagingTemplate.convertAndSend("/topic/newModel", saved)
+        return convertToDto(saved)
     }
 
     @PutMapping("/{id}")
