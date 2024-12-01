@@ -1,5 +1,7 @@
 package io.github.zerumi.is1_250924_12060.controller
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import io.github.zerumi.is1_250924_12060.dto.RestError
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,11 +30,29 @@ class ExceptionHandlerController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(re)
     }
 
+    @ExceptionHandler(InvalidFormatException::class)
+    fun invalidData(ex: Exception): ResponseEntity<RestError> {
+        val re = RestError(
+            HttpStatus.BAD_REQUEST.toString(),
+            "Input data is not valid: ${ex.localizedMessage}"
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(re)
+    }
+
+    @ExceptionHandler(MismatchedInputException::class)
+    fun invalidFile(ex: Exception): ResponseEntity<RestError> {
+        val re = RestError(
+            HttpStatus.BAD_REQUEST.toString(),
+            "File is not valid!"
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(re)
+    }
+
     @ExceptionHandler(Exception::class)
     fun generalException(ex: Exception): ResponseEntity<RestError> {
         val re = RestError(
             HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-            "Something went wrong on server side: ${ex.localizedMessage}"
+            "Something went wrong on server side: ${ex.localizedMessage} / ${ex.javaClass.name}"
         )
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(re)
     }
