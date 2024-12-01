@@ -98,7 +98,10 @@ export class ImportUploadComponent implements OnInit {
     if (this.currentFile) {
       this.uploadService.upload(this.currentFile).subscribe({
         next: (event: any) => {
-          console.log(event);
+          if (event instanceof HttpResponse) {
+            this.dialogRef.close();
+            alert('Successfully imported ' + event.body + ' models!');
+          }
         },
         error: (err: any) => {
           console.log(err);
