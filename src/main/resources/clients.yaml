@@ -1,0 +1,27 @@
+# Models example
+- name: John
+  coordinates:
+    x: 10.5
+    y: 20.0
+  realHero: true
+  hasToothpick: false
+  car:
+    name: Mustang
+  mood: SADNESS
+  impactSpeed: 120
+  minutesOfWaiting: 30
+  weaponType: KNIFE
+
+- name: Jane
+  coordinates:
+    x: 15.0
+    y: 25.0
+  realHero: false
+  hasToothpick: null
+  car:
+    name: Tesla
+  mood: SADNESS
+  impactSpeed: 80
+  minutesOfWaiting: 10
+  weaponType: KNIFE
+

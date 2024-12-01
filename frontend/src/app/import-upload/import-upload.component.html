@@ -1,0 +1,13 @@
+<!-- new-model.component.html -->
+<h2 mat-dialog-title>{{ invitation }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="newModelForm" (ngSubmit)="onSubmit()" class="form-grid">
+    <div class="form-column">
+      <input type="file" (change)="selectFile($event)" />
+    </div>
+    <div class="form-actions">
+      <button mat-button color="warn" (click)="onCancel()">Cancel</button>
+      <button mat-button color="primary" type="submit">Submit</button>
+    </div>
+  </form>
+</mat-dialog-content>

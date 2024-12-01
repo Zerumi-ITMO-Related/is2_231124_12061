@@ -19,6 +19,7 @@ import { UserService } from '../user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewModelComponent } from '../new-model/new-model.component';
 import { FormsModule } from '@angular/forms';
+import { ImportUploadComponent } from '../import-upload/import-upload.component';
 
 const ELEMENT_DATA: HumanBeing[] = [
   {
@@ -139,6 +140,10 @@ export class MainComponent implements AfterViewInit {
     this.dialog.open(NewModelComponent, { data: { update: false } });
   }
 
+  importModels() {
+    this.dialog.open(ImportUploadComponent);
+  }
+
   updateAll() {
     this.humanBeingService.updateAll();
   }
@@ -160,11 +165,11 @@ export class MainComponent implements AfterViewInit {
   }
 
   getSumOfMinutesWaiting() {
-    this.http.get(environment.backendURL + '/api/v1/model/totalMinutesOfWaiting', {}).subscribe(
-      (data) => {
+    this.http
+      .get(environment.backendURL + '/api/v1/model/totalMinutesOfWaiting', {})
+      .subscribe((data) => {
         alert('Sum of minutes of waiting: ' + data);
-      }
-    );
+      });
   }
 
   logout() {
