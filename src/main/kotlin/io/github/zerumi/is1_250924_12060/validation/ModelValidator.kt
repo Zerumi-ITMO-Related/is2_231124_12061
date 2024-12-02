@@ -1,7 +1,6 @@
 package io.github.zerumi.is1_250924_12060.validation
 
 import io.github.zerumi.is1_250924_12060.entity.HumanBeingEntity
-import io.github.zerumi.is1_250924_12060.model.HumanBeing
 import io.github.zerumi.is1_250924_12060.repository.CoordinatesRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Isolation

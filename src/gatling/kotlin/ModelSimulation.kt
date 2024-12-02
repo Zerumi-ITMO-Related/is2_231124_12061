@@ -9,12 +9,6 @@ import kotlin.random.Random
 class ModelSimulation : Simulation() {
     private val httpProtocol = HttpDsl.http.baseUrl("http://localhost:8080").contentTypeHeader("application/json")
 
-    private val getTransactionsByLegalEntityId = CoreDsl.exec(
-        HttpDsl.http("getting models")["/api/v1/model"].check(
-            HttpDsl.status().`is`(200)
-        )
-    )
-
     private val randomCord: Int
         get() = Random.nextInt(605)
 
@@ -99,7 +93,7 @@ class ModelSimulation : Simulation() {
     init {
         setUp(
             crudTransaction.injectOpen(
-                CoreDsl.constantUsersPerSec(1.0).during(Duration.ofSeconds(15))
+                CoreDsl.constantUsersPerSec(5.0).during(Duration.ofSeconds(15))
             )
         ).protocols(httpProtocol)
     }
